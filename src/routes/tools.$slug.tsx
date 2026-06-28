@@ -8,7 +8,8 @@ export const Route = createFileRoute("/tools/$slug")({
   loader: ({ params }) => {
     const tool = getTool(params.slug);
     if (!tool) throw notFound();
-    return { tool };
+    const { icon: _icon, ...safe } = tool;
+    return { tool: safe };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
