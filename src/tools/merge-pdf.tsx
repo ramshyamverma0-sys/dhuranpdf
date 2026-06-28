@@ -20,7 +20,7 @@ export default function MergePDF() {
         pages.forEach((p) => out.addPage(p));
       }
       const bytes = await out.save();
-      download(new Blob([bytes], { type: "application/pdf" }), "merged.pdf");
+      download(new Blob([bytes as BlobPart], { type: "application/pdf" }), "merged.pdf");
       toast.success("PDF merged successfully");
     } catch (e: any) {
       toast.error(e.message || "Failed to merge PDFs");

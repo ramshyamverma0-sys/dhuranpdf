@@ -17,7 +17,7 @@ export default function RotatePDF() {
       const doc = await PDFDocument.load(await files[0].arrayBuffer());
       doc.getPages().forEach((p) => p.setRotation(degrees(parseInt(angle))));
       const bytes = await doc.save();
-      download(new Blob([bytes], { type: "application/pdf" }), "rotated.pdf");
+      download(new Blob([bytes as BlobPart], { type: "application/pdf" }), "rotated.pdf");
       toast.success("PDF rotated");
     } catch (e: any) {
       toast.error(e.message || "Failed to rotate");

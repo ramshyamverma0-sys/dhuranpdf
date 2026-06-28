@@ -20,7 +20,7 @@ export default function SplitPDF() {
         const [p] = await out.copyPages(src, [i]);
         out.addPage(p);
         const bytes = await out.save();
-        download(new Blob([bytes], { type: "application/pdf" }), `page-${i + 1}.pdf`);
+        download(new Blob([bytes as BlobPart], { type: "application/pdf" }), `page-${i + 1}.pdf`);
       }
       toast.success(`Split into ${pageCount} files`);
     } catch (e: any) {

@@ -22,7 +22,7 @@ export default function JpgToPDF() {
         page.drawImage(img, { x: 0, y: 0, width, height });
       }
       const pdf = await out.save();
-      download(new Blob([pdf], { type: "application/pdf" }), "images.pdf");
+      download(new Blob([pdf as BlobPart], { type: "application/pdf" }), "images.pdf");
       toast.success("PDF created");
     } catch (e: any) {
       toast.error(e.message || "Failed to convert");
