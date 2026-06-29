@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { PDFDocument } from "pdf-lib";
+import JSZip from "jszip";
 import { toast } from "sonner";
 import { Btn } from "@/components/tool-page";
 import { FileDropzone, download } from "@/components/file-dropzone";
@@ -15,14 +16,21 @@ export default function SplitPDF() {
     try {
       const src = await PDFDocument.load(await files[0].arrayBuffer());
       const pageCount = src.getPageCount();
+      if (pageCount === 1) {
+        toast.error("PDF has only one page — nothing to split");
+        return;
+      }
+      const zip = new JSZip();
       for (let i = 0; i < pageCount; i++) {
         const out = await PDFDocument.create();
         const [p] = await out.copyPages(src, [i]);
         out.addPage(p);
         const bytes = await out.save();
-        download(new Blob([bytes as BlobPart], { type: "application/pdf" }), `page-${i + 1}.pdf`);
+        zip.file(`page-${i + 1}.pdf`, bytes);
       }
-      toast.success(`Split into ${pageCount} files`);
+      const blob = await zip.generateAsync({ type: "blob" });
+      download(blob, "split-pages.zip");
+      toast.success(`Split into ${pageCount} files (zipped)`);
     } catch (e: any) {
       toast.error(e.message || "Failed to split PDF");
     } finally {
@@ -32,9 +40,9 @@ export default function SplitPDF() {
 
   return (
     <div className="space-y-5">
-      <FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="One PDF file — each page will download separately" />
+      <FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="One PDF file — every page is exported into a single ZIP download" />
       <Btn onClick={run} disabled={busy || !files.length}>
-        {busy && <Loader2 className="h-4 w-4 animate-spin" />} Split into pages
+        {busy && <Loader2 className="h-4 w-4 animate-spin" />} Split into pages (ZIP)
       </Btn>
     </div>
   );
