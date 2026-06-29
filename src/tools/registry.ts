@@ -173,4 +173,14 @@ export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = 
   "ai-question-generator": AIQuestionGenerator,
   "ai-pdf-summarizer": AIPdfSummarizer,
   "ai-chat": AIChat,
+
+  // Media
+  "video-thumbnail-extractor": VideoThumbnail,
+  "video-metadata-viewer": VideoMetadata,
+  "audio-metadata-viewer": AudioMetadata,
+  "voice-recorder": VoiceRecorder,
+  "audio-player": MediaPlayer,
+  "video-player": MediaPlayer,
+  "video-trimmer": VideoTrimmer,
+  "youtube-player": YouTubePlayer,
 };
