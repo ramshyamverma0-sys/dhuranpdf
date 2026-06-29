@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { toast } from "sonner";
+import JSZip from "jszip";
 import { Btn } from "@/components/tool-page";
 import { FileDropzone, download } from "@/components/file-dropzone";
 import { Loader2 } from "lucide-react";
@@ -10,21 +11,34 @@ export default function PngJpgConvert({ slug }: { slug: string }) {
   const [files, setFiles] = useState<File[]>([]);
   const [busy, setBusy] = useState(false);
 
+  const convertOne = async (f: File): Promise<{ name: string; blob: Blob }> => {
+    const img = await createImageBitmap(f);
+    const c = document.createElement("canvas");
+    c.width = img.width; c.height = img.height;
+    const ctx = c.getContext("2d")!;
+    if (targetIsJpg) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); }
+    ctx.drawImage(img, 0, 0);
+    const type = targetIsJpg ? "image/jpeg" : "image/png";
+    const ext = targetIsJpg ? "jpg" : "png";
+    const blob = await new Promise<Blob>((res) => c.toBlob((b) => res(b!), type, 0.92));
+    return { name: f.name.replace(/\.[^.]+$/, "") + "." + ext, blob };
+  };
+
   const run = async () => {
     if (!files.length) return toast.error("Add images first");
     setBusy(true);
     try {
-      for (const f of files) {
-        const img = await createImageBitmap(f);
-        const c = document.createElement("canvas");
-        c.width = img.width; c.height = img.height;
-        const ctx = c.getContext("2d")!;
-        if (targetIsJpg) { ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height); }
-        ctx.drawImage(img, 0, 0);
-        const type = targetIsJpg ? "image/jpeg" : "image/png";
-        const ext = targetIsJpg ? "jpg" : "png";
-        const blob = await new Promise<Blob>((res) => c.toBlob((b) => res(b!), type, 0.92));
-        download(blob, f.name.replace(/\.[^.]+$/, "") + "." + ext);
+      if (files.length === 1) {
+        const r = await convertOne(files[0]);
+        download(r.blob, r.name);
+      } else {
+        const zip = new JSZip();
+        for (const f of files) {
+          const r = await convertOne(f);
+          zip.file(r.name, r.blob);
+        }
+        const blob = await zip.generateAsync({ type: "blob" });
+        download(blob, `converted-${targetIsJpg ? "jpg" : "png"}.zip`);
       }
       toast.success("Converted");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }

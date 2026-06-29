@@ -221,6 +221,16 @@ export const TOOLS: Tool[] = [
   t("receipt-generator", "Receipt Generator", "business", "Generate receipts instantly.", FileText, "receipt-generator"),
   t("business-name-generator", "Business Name Generator", "business", "Find a name for your business.", Briefcase, "business-name-generator"),
   t("email-signature-generator", "Email Signature Generator", "business", "Create email signatures.", Mail, "email-signature-generator"),
+
+  // ============ Media (Video & Audio) ============
+  t("video-thumbnail-extractor", "Video Thumbnail Extractor", "media", "Capture a frame from any video as a PNG.", ImageIcon, "video-thumbnail-extractor"),
+  t("video-metadata-viewer", "Video Metadata Viewer", "media", "View resolution, duration and size of a video.", Film, "video-metadata-viewer"),
+  t("audio-metadata-viewer", "Audio Metadata Viewer", "media", "View duration, size and type of an audio file.", Music, "audio-metadata-viewer"),
+  t("voice-recorder", "Voice Recorder", "media", "Record voice from your microphone and download.", Mic, "voice-recorder"),
+  t("audio-player", "Audio Player", "media", "Play any local audio file safely in browser.", Music, "audio-player"),
+  t("video-player", "Video Player", "media", "Play any local video file safely in browser.", Film, "video-player"),
+  t("video-trimmer", "Video Trimmer", "media", "Trim a short clip from any video and download (WebM).", Scissors, "video-trimmer"),
+  t("youtube-player", "YouTube Player", "media", "Preview any YouTube video by URL.", Youtube, "youtube-player"),
 ];
 
 export const TOTAL_TOOLS = TOOLS.length;
