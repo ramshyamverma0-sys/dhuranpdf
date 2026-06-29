@@ -35,6 +35,7 @@ import { InvoiceGenerator, ReceiptGenerator, BusinessNameGenerator, EmailSignatu
 import { ImageCropper, ImageColorPicker, WebpConverter } from "@/tools/image-tools-extra";
 import { CompressPdf, AddPageNumbers, WatermarkPdf, ExtractPages, DeletePages, PdfToText, EditPdfMetadata, CropPdf, ResizePdf, HtmlToPdf, ProtectPdf, UnlockPdf } from "@/tools/pdf-tools-extra";
 import { AIGrammarChecker, AIParaphraser, AITranslator, AICoverLetter, AIBlogGenerator, AIEmailWriter, AIResumeBuilder, AIQuestionGenerator, AIPdfSummarizer, AIChat } from "@/tools/ai-tools";
+import { VideoThumbnail, VideoMetadata, AudioMetadata, VoiceRecorder, MediaPlayer, VideoTrimmer, YouTubePlayer } from "@/tools/media-tools";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = {
   "merge-pdf": MergePDF,
