@@ -26,10 +26,13 @@ function makePromptTool(opts: { system: string; placeholder: string; controls?: 
       <div className="space-y-3">
         <Textarea rows={8} value={text} onChange={(e) => setText(e.target.value)} placeholder={opts.placeholder} />
         {opts.controls?.(state, setState)}
-        <Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Generate</Btn>
+        <div className="flex flex-wrap gap-2">
+          <Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Generate</Btn>
+          <Btn variant="secondary" onClick={() => { setText(""); setOut(""); toast.success("Reset complete"); }}>Reset</Btn>
+        </div>
         {out && <ResultBox>
           <div className="flex justify-between mb-2"><div className="text-xs font-semibold uppercase text-muted-foreground">Result</div>
-          <button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button></div>
+          <div className="flex gap-3"><button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button><button onClick={() => { download(new Blob([out], { type: "text/plain" }), "ai-result.txt"); toast.success("Downloaded"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary">Download</button></div></div>
           <div className="whitespace-pre-wrap text-sm leading-relaxed">{out}</div>
         </ResultBox>}
       </div>
@@ -103,11 +106,23 @@ export const AINotesGenerator = makePromptTool({
   buildUser: (t, s) => `Create ${s.style} notes from:\n\n${t}`,
 });
 
-export const AIPdfSummarizer = makePromptTool({
-  system: "You are a concise document summarizer. Provide key points and a brief executive summary.",
-  placeholder: "Paste PDF text content here (use 'PDF to Text' tool first)...",
-  buildUser: (t) => `Summarize this document content with bullet points and a brief summary:\n\n${t}`,
-});
+export function AIPdfSummarizer() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [text, setText] = useState("");
+  const [out, setOut] = useState("");
+  const [busy, setBusy] = useState(false);
+  const fn = useServerFn(aiPrompt);
+  const run = async () => {
+    setBusy(true);
+    try {
+      const source = files.length ? await extractPdfText(files[0]) : text;
+      if (source.trim().length < 20) return toast.error("Upload a text PDF or paste PDF text");
+      const r = await fn({ data: { system: "You are a concise document summarizer. Provide an executive summary, key points, action items, and important numbers.", user: `Summarize this PDF content:\n\n${source.slice(0, 20000)}` } });
+      setOut(r.text); toast.success("PDF summary generated");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Upload a text PDF, or paste extracted text below" /><Field label="Optional PDF text"><Textarea rows={6} value={text} onChange={(e) => setText(e.target.value)} /></Field><div className="flex flex-wrap gap-2"><Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}Summarize PDF</Btn><Btn variant="secondary" onClick={() => { setFiles([]); setText(""); setOut(""); toast.success("Reset complete"); }}>Reset</Btn></div>{out && <ResultBox><div className="flex justify-between mb-2"><div className="text-xs font-semibold uppercase text-muted-foreground">PDF Summary</div><button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button></div><div className="whitespace-pre-wrap text-sm leading-relaxed">{out}</div><Btn className="mt-4" variant="secondary" onClick={() => download(new Blob([out], { type: "text/plain" }), "pdf-summary.txt")}>Download summary</Btn></ResultBox>}</div>;
+}
 
 export function AIPdfChat() {
   const [files, setFiles] = useState<File[]>([]);
