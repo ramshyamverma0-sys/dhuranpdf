@@ -1,4 +1,5 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { getTool } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/tools/registry";
 import { ToolPage } from "@/components/tool-page";
@@ -33,14 +34,15 @@ export const Route = createFileRoute("/tools/$slug")({
 
 function ToolDispatcher() {
   const { tool } = Route.useLoaderData();
+  const [resetKey, setResetKey] = useState(0);
   const Comp = tool.componentKey ? TOOL_COMPONENTS[tool.componentKey] : null;
 
   return (
-    <ToolPage title={tool.name} description={tool.description} category={tool.category}>
+    <ToolPage title={tool.name} description={tool.description} category={tool.category} onReset={() => setResetKey((k) => k + 1)}>
       {Comp ? (
-        <Comp slug={tool.slug} />
+        <Comp key={resetKey} slug={tool.slug} />
       ) : (
-        <GenericWorkingTool slug={tool.slug} />
+        <GenericWorkingTool key={resetKey} slug={tool.slug} />
       )}
     </ToolPage>
   );
