@@ -33,7 +33,7 @@ export async function renderPdfPages(
     if (!ctx) throw new Error("Canvas is not supported in this browser");
     canvas.width = Math.ceil(viewport.width);
     canvas.height = Math.ceil(viewport.height);
-    await page.render({ canvasContext: ctx as any, viewport }).promise;
+    await page.render({ canvas, canvasContext: ctx as any, viewport }).promise;
     const mime = format === "jpg" ? "image/jpeg" : "image/png";
     const blob = await new Promise<Blob>((resolve, reject) =>
       canvas.toBlob((b) => (b ? resolve(b) : reject(new Error("Failed to render PDF page"))), mime, opts.quality ?? 0.86),
