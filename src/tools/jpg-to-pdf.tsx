@@ -46,7 +46,7 @@ export default function JpgToPDF() {
 
   return (
     <div className="space-y-5">
-      <FileDropzone accept="image/jpeg,image/png" multiple files={files} onFiles={setFiles} hint="JPG or PNG — each image becomes one page" />
+      <FileDropzone accept="image/jpeg,image/png,image/webp,image/heic,image/heif,.heic,.heif" multiple files={files} onFiles={setFiles} hint="JPG, PNG, WEBP or HEIC — each image becomes one page" />
       <Btn onClick={run} disabled={busy || !files.length}>
         {busy && <Loader2 className="h-4 w-4 animate-spin" />} Convert to PDF
       </Btn>
