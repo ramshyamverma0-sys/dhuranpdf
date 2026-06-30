@@ -1,8 +1,9 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
+import { useState } from "react";
 import { getTool } from "@/lib/tools";
 import { TOOL_COMPONENTS } from "@/tools/registry";
 import { ToolPage } from "@/components/tool-page";
-import { Wand2 } from "lucide-react";
+import GenericWorkingTool from "@/tools/generic-tool";
 
 export const Route = createFileRoute("/tools/$slug")({
   loader: ({ params }) => {
@@ -33,19 +34,15 @@ export const Route = createFileRoute("/tools/$slug")({
 
 function ToolDispatcher() {
   const { tool } = Route.useLoaderData();
+  const [resetKey, setResetKey] = useState(0);
   const Comp = tool.componentKey ? TOOL_COMPONENTS[tool.componentKey] : null;
 
   return (
-    <ToolPage title={tool.name} description={tool.description} category={tool.category}>
+    <ToolPage title={tool.name} description={tool.description} category={tool.category} onReset={() => setResetKey((k) => k + 1)}>
       {Comp ? (
-        <Comp slug={tool.slug} />
+        <Comp key={resetKey} slug={tool.slug} />
       ) : (
-        <div className="text-center py-12">
-          <span className="inline-grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary mb-4"><Wand2 className="h-6 w-6" /></span>
-          <h2 className="text-xl font-semibold">Coming soon</h2>
-          <p className="mt-2 text-muted-foreground text-sm max-w-md mx-auto">This tool is on our roadmap. In the meantime, explore other tools that are ready to use.</p>
-          <Link to="/all-tools" className="mt-6 inline-flex h-10 px-4 items-center rounded-md primary-gradient text-sm font-medium">Browse tools</Link>
-        </div>
+        <GenericWorkingTool key={resetKey} slug={tool.slug} />
       )}
     </ToolPage>
   );

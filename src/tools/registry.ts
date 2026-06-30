@@ -33,8 +33,8 @@ import { Md5Generator, ShaGenerator, TextEncryptor, ZipCreator, ZipExtractor } f
 import { HtmlFormatter, CssFormatter, JsFormatter, SqlFormatter, RegexTester, ColorConverter, MetaTagGenerator, RobotsTxtGenerator } from "@/tools/developer-tools";
 import { InvoiceGenerator, ReceiptGenerator, BusinessNameGenerator, EmailSignatureGenerator } from "@/tools/business-tools";
 import { ImageCropper, ImageColorPicker, WebpConverter } from "@/tools/image-tools-extra";
-import { CompressPdf, AddPageNumbers, WatermarkPdf, ExtractPages, DeletePages, PdfToText, EditPdfMetadata, CropPdf, ResizePdf, HtmlToPdf, ProtectPdf, UnlockPdf } from "@/tools/pdf-tools-extra";
-import { AIGrammarChecker, AIParaphraser, AITranslator, AICoverLetter, AIBlogGenerator, AIEmailWriter, AIResumeBuilder, AIQuestionGenerator, AIPdfSummarizer, AIChat } from "@/tools/ai-tools";
+import { CompressPdf, AddPageNumbers, WatermarkPdf, ExtractPages, DeletePages, PdfToText, EditPdfMetadata, CropPdf, ResizePdf, HtmlToPdf, ProtectPdf, UnlockPdf, PdfToImage, PdfToWord, PdfToExcel, PdfEditor, OcrPdf, PdfConverter } from "@/tools/pdf-tools-extra";
+import { AIGrammarChecker, AIParaphraser, AITranslator, AICoverLetter, AIBlogGenerator, AIEmailWriter, AIResumeBuilder, AIQuestionGenerator, AIPdfSummarizer, AIChat, AIPdfChat, AINotesGenerator, AIOcrScanner } from "@/tools/ai-tools";
 import { VideoThumbnail, VideoMetadata, AudioMetadata, VoiceRecorder, MediaPlayer, VideoTrimmer, YouTubePlayer } from "@/tools/media-tools";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = {
@@ -161,6 +161,13 @@ export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = 
   "html-to-pdf": HtmlToPdf,
   "protect-pdf": ProtectPdf,
   "unlock-pdf": UnlockPdf,
+  "pdf-converter": PdfConverter,
+  "pdf-editor": PdfEditor,
+  "ocr-pdf": OcrPdf,
+  "pdf-to-word": PdfToWord,
+  "pdf-to-excel": PdfToExcel,
+  "pdf-to-jpg": PdfToImage,
+  "pdf-to-png": PdfToImage,
 
   // AI
   "ai-grammar-checker": AIGrammarChecker,
@@ -172,6 +179,9 @@ export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = 
   "ai-resume-builder": AIResumeBuilder,
   "ai-question-generator": AIQuestionGenerator,
   "ai-pdf-summarizer": AIPdfSummarizer,
+  "ai-pdf-chat": AIPdfChat,
+  "ai-notes-generator": AINotesGenerator,
+  "ai-ocr-scanner": AIOcrScanner,
   "ai-chat": AIChat,
 
   // Media

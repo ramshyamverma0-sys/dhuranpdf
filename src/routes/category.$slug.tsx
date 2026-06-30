@@ -7,7 +7,8 @@ export const Route = createFileRoute("/category/$slug")({
   loader: ({ params }) => {
     const cat = getCategory(params.slug);
     if (!cat) throw notFound();
-    return { cat };
+    const { icon: _icon, ...safe } = cat;
+    return { cat: safe };
   },
   head: ({ loaderData }) => ({
     meta: loaderData
@@ -32,7 +33,7 @@ export const Route = createFileRoute("/category/$slug")({
 function CategoryPage() {
   const { cat } = Route.useLoaderData();
   const tools = getToolsByCategory(cat.slug);
-  const Icon = cat.icon;
+  const Icon = getCategory(cat.slug)?.icon;
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
@@ -44,7 +45,7 @@ function CategoryPage() {
         <span className="text-foreground">{cat.name}</span>
       </nav>
       <div className="flex items-start gap-4">
-        <span className="grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary"><Icon className="h-7 w-7" /></span>
+        {Icon && <span className="grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary"><Icon className="h-7 w-7" /></span>}
         <div>
           <h1 className="text-3xl font-bold tracking-tight">{cat.name}</h1>
           <p className="mt-1 text-muted-foreground">{cat.description}</p>

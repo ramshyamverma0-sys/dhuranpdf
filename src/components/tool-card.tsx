@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 
 export function ToolCard({ tool }: { tool: Tool }) {
   const Icon = tool.icon;
-  const implemented = !!tool.componentKey;
   return (
     <Link
       to="/tools/$slug"
@@ -16,11 +15,7 @@ export function ToolCard({ tool }: { tool: Tool }) {
         <span className="grid h-10 w-10 place-items-center rounded-lg bg-primary-soft text-primary group-hover:scale-110 transition-transform">
           <Icon className="h-5 w-5" />
         </span>
-        {implemented ? (
-          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-success/10 text-success border border-success/20">Ready</span>
-        ) : (
-          <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted text-muted-foreground border border-border">Soon</span>
-        )}
+        <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-success/10 text-success border border-success/20">Ready</span>
       </div>
       <div className="min-w-0">
         <h3 className="font-semibold text-sm truncate">{tool.name}</h3>

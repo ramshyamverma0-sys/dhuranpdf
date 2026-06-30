@@ -4,6 +4,8 @@ import { aiPrompt, aiChat } from "@/lib/ai.functions";
 import { Btn, Field, Textarea, Select, ResultBox, Input } from "@/components/tool-page";
 import { toast } from "sonner";
 import { Loader2, Send, Copy, Sparkles } from "lucide-react";
+import { FileDropzone, download } from "@/components/file-dropzone";
+import { extractPdfText, ocrPdf } from "@/tools/pdf-client";
 
 function makePromptTool(opts: { system: string; placeholder: string; controls?: (s: any, set: (v: any) => void) => React.ReactNode; buildUser: (text: string, state: any) => string; defaultState?: any }) {
   return function PromptTool() {
@@ -24,10 +26,13 @@ function makePromptTool(opts: { system: string; placeholder: string; controls?: 
       <div className="space-y-3">
         <Textarea rows={8} value={text} onChange={(e) => setText(e.target.value)} placeholder={opts.placeholder} />
         {opts.controls?.(state, setState)}
-        <Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Generate</Btn>
+        <div className="flex flex-wrap gap-2">
+          <Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />} Generate</Btn>
+          <Btn variant="secondary" onClick={() => { setText(""); setOut(""); toast.success("Reset complete"); }}>Reset</Btn>
+        </div>
         {out && <ResultBox>
           <div className="flex justify-between mb-2"><div className="text-xs font-semibold uppercase text-muted-foreground">Result</div>
-          <button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button></div>
+          <div className="flex gap-3"><button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button><button onClick={() => { download(new Blob([out], { type: "text/plain" }), "ai-result.txt"); toast.success("Downloaded"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary">Download</button></div></div>
           <div className="whitespace-pre-wrap text-sm leading-relaxed">{out}</div>
         </ResultBox>}
       </div>
@@ -93,11 +98,77 @@ export const AIQuestionGenerator = makePromptTool({
   buildUser: (t, s) => `Create ${s.n} multiple-choice questions about:\n\n${t}`,
 });
 
-export const AIPdfSummarizer = makePromptTool({
-  system: "You are a concise document summarizer. Provide key points and a brief executive summary.",
-  placeholder: "Paste PDF text content here (use 'PDF to Text' tool first)...",
-  buildUser: (t) => `Summarize this document content with bullet points and a brief summary:\n\n${t}`,
+export const AINotesGenerator = makePromptTool({
+  system: "You are an expert study-notes creator. Convert the content into organized notes with headings, bullets, key terms, and action items.",
+  placeholder: "Paste lecture, meeting, article, or PDF text...",
+  defaultState: { style: "study" },
+  controls: (s, set) => <Field label="Notes style"><Select value={s.style} onChange={(e) => set({ ...s, style: e.target.value })}><option>study</option><option>meeting</option><option>outline</option><option>revision</option></Select></Field>,
+  buildUser: (t, s) => `Create ${s.style} notes from:\n\n${t}`,
 });
+
+export function AIPdfSummarizer() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [text, setText] = useState("");
+  const [out, setOut] = useState("");
+  const [busy, setBusy] = useState(false);
+  const fn = useServerFn(aiPrompt);
+  const run = async () => {
+    setBusy(true);
+    try {
+      const source = files.length ? await extractPdfText(files[0]) : text;
+      if (source.trim().length < 20) return toast.error("Upload a text PDF or paste PDF text");
+      const r = await fn({ data: { system: "You are a concise document summarizer. Provide an executive summary, key points, action items, and important numbers.", user: `Summarize this PDF content:\n\n${source.slice(0, 20000)}` } });
+      setOut(r.text); toast.success("PDF summary generated");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Upload a text PDF, or paste extracted text below" /><Field label="Optional PDF text"><Textarea rows={6} value={text} onChange={(e) => setText(e.target.value)} /></Field><div className="flex flex-wrap gap-2"><Btn onClick={run} disabled={busy}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}Summarize PDF</Btn><Btn variant="secondary" onClick={() => { setFiles([]); setText(""); setOut(""); toast.success("Reset complete"); }}>Reset</Btn></div>{out && <ResultBox><div className="flex justify-between mb-2"><div className="text-xs font-semibold uppercase text-muted-foreground">PDF Summary</div><button onClick={async () => { await navigator.clipboard.writeText(out); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button></div><div className="whitespace-pre-wrap text-sm leading-relaxed">{out}</div><Btn className="mt-4" variant="secondary" onClick={() => download(new Blob([out], { type: "text/plain" }), "pdf-summary.txt")}>Download summary</Btn></ResultBox>}</div>;
+}
+
+export function AIPdfChat() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [context, setContext] = useState("");
+  const [question, setQuestion] = useState("What are the key points?");
+  const [answer, setAnswer] = useState("");
+  const [busy, setBusy] = useState(false);
+  const fn = useServerFn(aiPrompt);
+  const loadPdf = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    setBusy(true);
+    try {
+      const text = await extractPdfText(files[0]);
+      setContext(text.slice(0, 18000));
+      toast.success("PDF text loaded");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  const ask = async () => {
+    if (!context.trim()) return toast.error("Load PDF text first");
+    if (!question.trim()) return toast.error("Enter a question");
+    setBusy(true);
+    try {
+      const r = await fn({ data: { system: "Answer questions using only the supplied PDF content. If the answer is not present, say so clearly.", user: `PDF content:\n${context}\n\nQuestion: ${question}` } });
+      setAnswer(r.text);
+      toast.success("Answer generated");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} /><Btn onClick={loadPdf} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Load PDF</Btn>{context && <div className="text-xs text-success">Loaded {context.length.toLocaleString()} characters</div>}<Field label="Ask about this PDF"><Input value={question} onChange={(e) => setQuestion(e.target.value)} /></Field><Btn onClick={ask} disabled={busy || !context}>{busy ? <Loader2 className="h-4 w-4 animate-spin" /> : <Sparkles className="h-4 w-4" />}Ask AI</Btn>{answer && <ResultBox><div className="flex justify-between mb-2"><div className="text-xs font-semibold uppercase text-muted-foreground">Answer</div><button onClick={async () => { await navigator.clipboard.writeText(answer); toast.success("Copied"); }} className="text-xs inline-flex items-center gap-1 hover:text-primary"><Copy className="h-3 w-3" /> Copy</button></div><div className="whitespace-pre-wrap text-sm leading-relaxed">{answer}</div></ResultBox>}</div>;
+}
+
+export function AIOcrScanner() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [text, setText] = useState("");
+  const [status, setStatus] = useState("");
+  const [busy, setBusy] = useState(false);
+  const run = async () => {
+    if (!files.length) return toast.error("Add a scanned PDF");
+    setBusy(true); setText("");
+    try {
+      const out = await ocrPdf(files[0], setStatus);
+      setText(out || "No text recognized.");
+      toast.success("OCR complete");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); setStatus(""); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="OCR runs locally in your browser" /><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Scan text with AI OCR</Btn>{status && <div className="text-sm text-muted-foreground">{status}</div>}{text && <><Textarea rows={12} readOnly value={text} /><div className="flex gap-2 flex-wrap"><Btn variant="secondary" onClick={async () => { await navigator.clipboard.writeText(text); toast.success("Copied"); }}>Copy</Btn><Btn variant="secondary" onClick={() => download(new Blob([text], { type: "text/plain" }), "ocr-scan.txt")}>Download</Btn></div></>}</div>;
+}
 
 export function AIChat() {
   const [msgs, setMsgs] = useState<{ role: "user" | "assistant"; content: string }[]>([]);

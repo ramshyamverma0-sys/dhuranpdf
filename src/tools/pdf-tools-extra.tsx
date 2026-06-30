@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { PDFDocument, StandardFonts, rgb, degrees } from "pdf-lib";
 import { toast } from "sonner";
-import { Btn, Field, Input, Textarea } from "@/components/tool-page";
+import { Btn, Field, Input, Textarea, ResultBox, Select } from "@/components/tool-page";
 import { FileDropzone, download } from "@/components/file-dropzone";
-import { Loader2 } from "lucide-react";
+import { Loader2, Copy, Download } from "lucide-react";
+import { extractPdfText, ocrPdf, rasterCompressPdf, renderPdfPages, zipBlobs } from "@/tools/pdf-client";
 
 function busyHook() {
   const [busy, setBusy] = useState(false);
@@ -12,19 +13,45 @@ function busyHook() {
 
 export function CompressPdf() {
   const [files, setFiles] = useState<File[]>([]);
+  const [target, setTarget] = useState("500");
+  const [custom, setCustom] = useState(750);
+  const [unit, setUnit] = useState("KB");
+  const [status, setStatus] = useState("");
+  const [stats, setStats] = useState<{ before: number; after: number } | null>(null);
   const [busy, setBusy] = busyHook();
+  const targetBytes = target === "custom" ? custom * (unit === "MB" ? 1024 * 1024 : 1024) : Number(target) * 1024;
+  const reset = () => { setFiles([]); setTarget("500"); setCustom(750); setUnit("KB"); setStats(null); setStatus(""); };
   const run = async () => {
     if (!files.length) return toast.error("Add a PDF");
+    if (targetBytes < 25 * 1024) return toast.error("Target size is too small");
     setBusy(true);
+    setStats(null);
+    setStatus("Reading PDF…");
     try {
-      const doc = await PDFDocument.load(await files[0].arrayBuffer());
-      const bytes = await doc.save({ useObjectStreams: true });
+      const firstPass = await PDFDocument.load(await files[0].arrayBuffer());
+      let bytes = await firstPass.save({ useObjectStreams: true, objectsPerTick: 50 });
+      if (bytes.byteLength > targetBytes) {
+        bytes = await rasterCompressPdf(files[0], targetBytes, setStatus);
+      }
       download(new Blob([bytes as BlobPart], { type: "application/pdf" }), "compressed.pdf");
       const before = files[0].size, after = bytes.byteLength;
-      toast.success(`${(before/1024).toFixed(0)}KB → ${(after/1024).toFixed(0)}KB`);
-    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+      setStats({ before, after });
+      toast.success(`Compressed: ${(before/1024).toFixed(0)}KB → ${(after/1024).toFixed(0)}KB`);
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); setStatus(""); }
   };
-  return <div className="space-y-3"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} /><Btn onClick={run} disabled={busy}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Compress</Btn></div>;
+  return (
+    <div className="space-y-4">
+      <FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Advanced compression with target size selection" />
+      <div className="grid gap-3 sm:grid-cols-3">
+        <Field label="Target size"><Select value={target} onChange={(e) => setTarget(e.target.value)}><option value="100">100 KB</option><option value="500">500 KB</option><option value="1024">1 MB</option><option value="2048">2 MB</option><option value="5120">5 MB</option><option value="custom">Custom</option></Select></Field>
+        {target === "custom" && <Field label="Custom size"><Input type="number" min="25" value={custom} onChange={(e) => setCustom(+e.target.value)} /></Field>}
+        {target === "custom" && <Field label="Unit"><Select value={unit} onChange={(e) => setUnit(e.target.value)}><option>KB</option><option>MB</option></Select></Field>}
+      </div>
+      <div className="flex flex-wrap gap-2"><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Compress PDF</Btn><Btn type="button" variant="secondary" onClick={reset}>Reset</Btn></div>
+      {status && <div className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="h-4 w-4 animate-spin" />{status}</div>}
+      {stats && <ResultBox><div className="grid gap-3 sm:grid-cols-3 text-center"><div><div className="text-xs text-muted-foreground">Original Size</div><div className="text-2xl font-bold">{(stats.before/1024).toFixed(1)} KB</div></div><div><div className="text-xs text-muted-foreground">Compressed Size</div><div className="text-2xl font-bold text-primary">{(stats.after/1024).toFixed(1)} KB</div></div><div><div className="text-xs text-muted-foreground">Compression</div><div className="text-2xl font-bold text-success">{Math.max(0, (100 - stats.after / stats.before * 100)).toFixed(1)}%</div></div></div></ResultBox>}
+    </div>
+  );
 }
 
 export function AddPageNumbers() {
@@ -167,22 +194,19 @@ export function PdfToText() {
   const [text, setText] = useState("");
   const [busy, setBusy] = busyHook();
   const run = async () => {
-    if (!files.length) return;
+    if (!files.length) return toast.error("Add a PDF");
     setBusy(true);
     try {
-      const buf = new Uint8Array(await files[0].arrayBuffer());
-      // crude text extraction: find (text) Tj patterns
-      const raw = new TextDecoder("latin1").decode(buf);
-      const matches = raw.match(/\(([^)]+)\)\s*Tj/g) || [];
-      const out = matches.map((m) => m.replace(/^\(/, "").replace(/\)\s*Tj$/, "")).join(" ").replace(/\\(\d{3})/g, (_, n) => String.fromCharCode(parseInt(n, 8)));
-      setText(out || "No extractable text found (this may be a scanned PDF).");
+      const out = await extractPdfText(files[0]);
+      setText(out || "No embedded text found. Use AI OCR Scanner for scanned PDFs.");
+      toast.success("Text extracted");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
   };
   return (
     <div className="space-y-3">
       <FileDropzone accept="application/pdf" files={files} onFiles={setFiles} />
       <Btn onClick={run} disabled={busy}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Extract text</Btn>
-      {text && <><Textarea rows={12} readOnly value={text} /><Btn variant="secondary" onClick={() => download(new Blob([text], { type: "text/plain" }), "extracted.txt")}>Download .txt</Btn></>}
+      {text && <><Textarea rows={12} readOnly value={text} /><div className="flex flex-wrap gap-2"><Btn variant="secondary" onClick={async () => { await navigator.clipboard.writeText(text); toast.success("Copied"); }}><Copy className="h-4 w-4" />Copy</Btn><Btn variant="secondary" onClick={() => download(new Blob([text], { type: "text/plain" }), "extracted.txt")}><Download className="h-4 w-4" />Download .txt</Btn></div></>}
     </div>
   );
 }
@@ -303,21 +327,153 @@ export function HtmlToPdf() {
   );
 }
 
+async function qpdfProcess(file: File, args: string[], outName: string) {
+  const createModule = (await import("@neslinesli93/qpdf-wasm")).default;
+  const qpdf = await createModule({ locateFile: () => "/qpdf.wasm" });
+  const FS: any = qpdf.FS;
+  FS.writeFile("/input.pdf", new Uint8Array(await file.arrayBuffer()));
+  const code = qpdf.callMain(args);
+  if (code !== 0) throw new Error("PDF password operation failed");
+  const out = FS.readFile("/output.pdf");
+  return new Blob([out], { type: "application/pdf" });
+}
+
 export function ProtectPdf() {
-  return <div className="text-sm text-muted-foreground bg-surface border border-border rounded p-4">Password protection requires a server-side encryptor. This client-side tool currently can't add passwords; coming soon with our backend service.</div>;
+  const [files, setFiles] = useState<File[]>([]);
+  const [password, setPassword] = useState("");
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    if (password.length < 4) return toast.error("Enter at least 4 characters");
+    setBusy(true);
+    try {
+      const blob = await qpdfProcess(files[0], ["/input.pdf", "--encrypt", password, password, "256", "--", "/output.pdf"], "protected.pdf");
+      download(blob, "protected.pdf");
+      toast.success("PDF protected");
+    } catch (e: any) { toast.error(e.message || "Failed to protect PDF"); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} /><Field label="Password"><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></Field><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Protect PDF</Btn></div>;
 }
 export function UnlockPdf() {
   const [files, setFiles] = useState<File[]>([]);
+  const [password, setPassword] = useState("");
   const [busy, setBusy] = busyHook();
   const run = async () => {
-    if (!files.length) return;
+    if (!files.length) return toast.error("Add a PDF");
     setBusy(true);
     try {
-      const doc = await PDFDocument.load(await files[0].arrayBuffer(), { ignoreEncryption: true });
-      const bytes = await doc.save();
-      download(new Blob([bytes as BlobPart], { type: "application/pdf" }), "unlocked.pdf");
+      let blob: Blob;
+      try {
+        blob = await qpdfProcess(files[0], [password ? `--password=${password}` : "--password=", "--decrypt", "/input.pdf", "/output.pdf"], "unlocked.pdf");
+      } catch {
+        const doc = await PDFDocument.load(await files[0].arrayBuffer(), { ignoreEncryption: true });
+        const bytes = await doc.save();
+        blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+      }
+      download(blob, "unlocked.pdf");
       toast.success("Saved without password");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
   };
-  return <div className="space-y-3"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Works only on PDFs with weak/owner-only protection" /><Btn onClick={run} disabled={busy}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Unlock</Btn></div>;
+  return <div className="space-y-3"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Enter the open password if the PDF requires one" /><Field label="Password (optional)"><Input type="password" value={password} onChange={(e) => setPassword(e.target.value)} /></Field><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Unlock</Btn></div>;
+}
+
+export function PdfToImage({ slug }: { slug?: string }) {
+  const [files, setFiles] = useState<File[]>([]);
+  const [format, setFormat] = useState(slug === "pdf-to-jpg" ? "jpg" : "png");
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    setBusy(true);
+    try {
+      const pages = await renderPdfPages(files[0], { format: format as "png" | "jpg", scale: 2 });
+      if (pages.length === 1) download(pages[0].blob, `page-1.${format}`);
+      else {
+        const zip = await zipBlobs(pages.map((p) => ({ name: `page-${p.page}.${format}`, blob: p.blob })), `pdf-pages-${format}.zip`);
+        download(zip.blob, zip.name);
+      }
+      toast.success(`Converted ${pages.length} pages`);
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} /><Field label="Output format"><Select value={format} onChange={(e) => setFormat(e.target.value)}><option value="png">PNG</option><option value="jpg">JPG</option></Select></Field><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Convert PDF pages</Btn></div>;
+}
+
+export function PdfToWord() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    setBusy(true);
+    try {
+      const text = await extractPdfText(files[0]);
+      const html = `<html><head><meta charset="utf-8"></head><body>${text.split("\n").map((p) => `<p>${p.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c] as string))}</p>`).join("")}</body></html>`;
+      download(new Blob([html], { type: "application/msword" }), files[0].name.replace(/\.pdf$/i, ".doc"));
+      toast.success("Word document created");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Extracts embedded text into an editable Word-compatible .doc file" /><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Convert to Word</Btn></div>;
+}
+
+export function PdfToExcel() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    setBusy(true);
+    try {
+      const text = await extractPdfText(files[0]);
+      const rows = text.split(/\n+/).map((line) => line.trim()).filter(Boolean).map((line) => line.split(/\s{2,}|\t|,/).map((c) => c.trim()));
+      const csv = rows.map((row) => row.map((c) => `"${c.replace(/"/g, '""')}"`).join(",")).join("\n");
+      download(new Blob([csv], { type: "text/csv" }), files[0].name.replace(/\.pdf$/i, ".csv"));
+      toast.success("Spreadsheet CSV created");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Extracts text/table-like rows into CSV for Excel" /><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Convert to Excel CSV</Btn></div>;
+}
+
+export function PdfEditor() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [text, setText] = useState("APPROVED");
+  const [x, setX] = useState(72);
+  const [y, setY] = useState(720);
+  const [size, setSize] = useState(24);
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a PDF");
+    if (!text.trim()) return toast.error("Enter text to add");
+    setBusy(true);
+    try {
+      const doc = await PDFDocument.load(await files[0].arrayBuffer());
+      const font = await doc.embedFont(StandardFonts.HelveticaBold);
+      doc.getPages()[0].drawText(text, { x, y, size, font, color: rgb(0.05, 0.31, 0.78) });
+      const bytes = await doc.save();
+      download(new Blob([bytes as BlobPart], { type: "application/pdf" }), "edited.pdf");
+      toast.success("PDF edited");
+    } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} /><Field label="Text"><Input value={text} onChange={(e) => setText(e.target.value)} /></Field><div className="grid grid-cols-3 gap-3"><Field label="X"><Input type="number" value={x} onChange={(e) => setX(+e.target.value)} /></Field><Field label="Y"><Input type="number" value={y} onChange={(e) => setY(+e.target.value)} /></Field><Field label="Font size"><Input type="number" value={size} onChange={(e) => setSize(+e.target.value)} /></Field></div><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Apply edit</Btn></div>;
+}
+
+export function OcrPdf() {
+  const [files, setFiles] = useState<File[]>([]);
+  const [text, setText] = useState("");
+  const [status, setStatus] = useState("");
+  const [busy, setBusy] = busyHook();
+  const run = async () => {
+    if (!files.length) return toast.error("Add a scanned PDF");
+    setBusy(true);
+    setText("");
+    try {
+      const out = await ocrPdf(files[0], setStatus);
+      setText(out || "No text recognized.");
+      toast.success("OCR complete");
+    } catch (e: any) { toast.error(e.message || "OCR failed"); } finally { setBusy(false); setStatus(""); }
+  };
+  return <div className="space-y-4"><FileDropzone accept="application/pdf" files={files} onFiles={setFiles} hint="Runs OCR in your browser; best for scanned English PDFs" /><Btn onClick={run} disabled={busy || !files.length}>{busy && <Loader2 className="h-4 w-4 animate-spin" />}Run OCR</Btn>{status && <div className="text-sm text-muted-foreground">{status}</div>}{text && <><Textarea rows={12} readOnly value={text} /><div className="flex flex-wrap gap-2"><Btn variant="secondary" onClick={async () => { await navigator.clipboard.writeText(text); toast.success("Copied"); }}><Copy className="h-4 w-4" />Copy</Btn><Btn variant="secondary" onClick={() => download(new Blob([text], { type: "text/plain" }), "ocr-text.txt")}>Download TXT</Btn></div></>}</div>;
+}
+
+export function PdfConverter({ slug }: { slug?: string }) {
+  if (slug === "pdf-to-word") return <PdfToWord />;
+  if (slug === "pdf-to-excel") return <PdfToExcel />;
+  if (slug === "pdf-to-jpg" || slug === "pdf-to-png") return <PdfToImage slug={slug} />;
+  return <div className="space-y-4"><PdfToImage slug="pdf-to-jpg" /><div className="border-t border-border pt-4"><PdfToWord /></div></div>;
 }
