@@ -131,6 +131,14 @@ export const TOOLS: Tool[] = [
   t("plot-area-calculator", "Plot Area Calculator", "land", "Calculate plot area from dimensions.", MapPin, "plot-area-calculator"),
   t("stamp-duty-calculator", "Stamp Duty Calculator", "land", "Estimate stamp duty.", FileText, "stamp-duty-calculator"),
 
+  // ============ More Tools ==========
+  t("more-zip-creator", "ZIP Creator", "more", "Create ZIP archives from files.", Archive, "zip-creator"),
+  t("more-hash-generator", "Hash Generator", "more", "Generate secure SHA-256 hashes.", Hash, "sha-generator"),
+  t("more-text-encryptor", "Text Encryptor", "more", "Encrypt and decrypt private text.", Lock, "text-encryptor"),
+  t("more-invoice-generator", "Invoice Generator", "more", "Create downloadable business invoices.", FileText, "invoice-generator"),
+  t("more-regex-tester", "Regex Tester", "more", "Test regular expressions live.", Code2, "regex-tester"),
+  t("more-color-converter", "Color Converter", "more", "Convert HEX, RGB and HSL colors.", Palette, "color-converter"),
+
   // ============ Converters ============
   t("length-converter", "Length Converter", "converter", "Convert meters, feet, inches and more.", Ruler, "length-converter"),
   t("temperature-converter", "Temperature Converter", "converter", "C, F, K conversions.", Thermometer, "temperature-converter"),
