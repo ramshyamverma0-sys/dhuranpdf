@@ -404,7 +404,8 @@ export function WatermarkStudio({ mode = "pdf" }: { mode?: "pdf" | "image" }) {
             p.drawText(l.text ?? "", {
               x: rx, y: ry, size, font, color: rgb(c.r, c.g, c.b),
               rotate: degrees(l.rotation), opacity: l.opacity,
-              characterSpacing: l.letterSpacing ?? 0,
+            });
+            void tw;
             });
             if (l.underline) {
               // underline as line: draw a thin rect via drawLine
