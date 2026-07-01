@@ -152,7 +152,8 @@ export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = 
   // PDF extras
   "compress-pdf": CompressPdf,
   "add-pdf-page-numbers": AddPageNumbers,
-  "watermark-pdf": WatermarkPdf,
+  "watermark-pdf": WatermarkPdfStudio,
+  "watermark-image": WatermarkImageStudio,
   "extract-pdf-pages": ExtractPages,
   "delete-pdf-pages": DeletePages,
   "pdf-to-text": PdfToText,
