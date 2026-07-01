@@ -36,6 +36,7 @@ import { ImageCropper, ImageColorPicker, WebpConverter } from "@/tools/image-too
 import { CompressPdf, AddPageNumbers, WatermarkPdf, ExtractPages, DeletePages, PdfToText, EditPdfMetadata, CropPdf, ResizePdf, HtmlToPdf, ProtectPdf, UnlockPdf, PdfToImage, PdfToWord, PdfToExcel, PdfEditor, OcrPdf, PdfConverter } from "@/tools/pdf-tools-extra";
 import { AIGrammarChecker, AIParaphraser, AITranslator, AICoverLetter, AIBlogGenerator, AIEmailWriter, AIResumeBuilder, AIQuestionGenerator, AIPdfSummarizer, AIChat, AIPdfChat, AINotesGenerator, AIOcrScanner } from "@/tools/ai-tools";
 import { VideoThumbnail, VideoMetadata, AudioMetadata, VoiceRecorder, MediaPlayer, VideoTrimmer, YouTubePlayer } from "@/tools/media-tools";
+import { WatermarkPdfStudio, WatermarkImageStudio } from "@/tools/watermark-studio";
 
 export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = {
   "merge-pdf": MergePDF,
@@ -151,7 +152,8 @@ export const TOOL_COMPONENTS: Record<string, ComponentType<{ slug: string }>> = 
   // PDF extras
   "compress-pdf": CompressPdf,
   "add-pdf-page-numbers": AddPageNumbers,
-  "watermark-pdf": WatermarkPdf,
+  "watermark-pdf": WatermarkPdfStudio,
+  "watermark-image": WatermarkImageStudio,
   "extract-pdf-pages": ExtractPages,
   "delete-pdf-pages": DeletePages,
   "pdf-to-text": PdfToText,

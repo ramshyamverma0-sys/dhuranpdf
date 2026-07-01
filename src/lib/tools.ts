@@ -210,6 +210,7 @@ export const TOOLS: Tool[] = [
   t("image-cropper", "Image Cropper", "image", "Crop images to custom size.", Crop, "image-cropper"),
   t("image-color-picker", "Image Color Picker", "image", "Pick colors from any image.", Palette, "image-color-picker"),
   t("webp-converter", "WebP Converter", "image", "Convert to and from WebP.", ImageIcon, "webp-converter"),
+  t("watermark-image", "Watermark Image", "image", "Add text or logo watermark to images with a live editor.", Stamp, "watermark-image"),
 
   // ============ Security ============
   t("zip-creator", "ZIP Creator", "security", "Create ZIP archives.", Archive, "zip-creator"),
