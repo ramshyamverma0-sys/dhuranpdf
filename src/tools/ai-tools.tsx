@@ -149,7 +149,7 @@ export function AIPdfChat() {
     if (!question.trim()) return toast.error("Enter a question");
     setBusy(true);
     try {
-      const r = await fn({ data: { system: "Answer questions using only the supplied PDF content. If the answer is not present, say so clearly.", user: `PDF content:\n${context}\n\nQuestion: ${question}` } });
+      const r = await fn({ data: { preset: "pdf-qa", user: `PDF content:\n${context}\n\nQuestion: ${question}` } });
       setAnswer(r.text);
       toast.success("Answer generated");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
