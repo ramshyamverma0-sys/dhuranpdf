@@ -121,7 +121,7 @@ export function AIPdfSummarizer() {
     try {
       const source = files.length ? await extractPdfText(files[0]) : text;
       if (source.trim().length < 20) return toast.error("Upload a text PDF or paste PDF text");
-      const r = await fn({ data: { system: "You are a concise document summarizer. Provide an executive summary, key points, action items, and important numbers.", user: `Summarize this PDF content:\n\n${source.slice(0, 20000)}` } });
+      const r = await fn({ data: { preset: "pdf-summary", user: `Summarize this PDF content:\n\n${source.slice(0, 20000)}` } });
       setOut(r.text); toast.success("PDF summary generated");
     } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
   };
