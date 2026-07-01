@@ -7,7 +7,9 @@ import { Loader2, Send, Copy, Sparkles } from "lucide-react";
 import { FileDropzone, download } from "@/components/file-dropzone";
 import { extractPdfText, ocrPdf } from "@/tools/pdf-client";
 
-function makePromptTool(opts: { system: string; placeholder: string; controls?: (s: any, set: (v: any) => void) => React.ReactNode; buildUser: (text: string, state: any) => string; defaultState?: any }) {
+type PresetKey = "grammar" | "paraphrase" | "translate" | "cover-letter" | "blog" | "email" | "resume" | "questions" | "notes" | "pdf-summary" | "pdf-qa";
+
+function makePromptTool(opts: { preset: PresetKey; placeholder: string; controls?: (s: any, set: (v: any) => void) => React.ReactNode; buildUser: (text: string, state: any) => string; defaultState?: any }) {
   return function PromptTool() {
     const [text, setText] = useState("");
     const [state, setState] = useState(opts.defaultState || {});
@@ -18,7 +20,7 @@ function makePromptTool(opts: { system: string; placeholder: string; controls?: 
       if (text.trim().length < 5) return toast.error("Enter some text");
       setBusy(true);
       try {
-        const r = await fn({ data: { system: opts.system, user: opts.buildUser(text, state) } });
+        const r = await fn({ data: { preset: opts.preset, user: opts.buildUser(text, state) } });
         setOut(r.text);
       } catch (e: any) { toast.error(e.message); } finally { setBusy(false); }
     };
@@ -39,6 +41,7 @@ function makePromptTool(opts: { system: string; placeholder: string; controls?: 
     );
   };
 }
+
 
 export const AIGrammarChecker = makePromptTool({
   system: "You are a meticulous grammar editor. Fix grammar, spelling, punctuation and clarity. Return only the corrected text.",
