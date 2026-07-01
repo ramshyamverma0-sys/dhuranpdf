@@ -44,13 +44,13 @@ function makePromptTool(opts: { preset: PresetKey; placeholder: string; controls
 
 
 export const AIGrammarChecker = makePromptTool({
-  system: "You are a meticulous grammar editor. Fix grammar, spelling, punctuation and clarity. Return only the corrected text.",
+  preset: "grammar",
   placeholder: "Paste text to check grammar...",
   buildUser: (t) => `Correct this text:\n\n${t}`,
 });
 
 export const AIParaphraser = makePromptTool({
-  system: "You are an expert paraphraser. Rewrite the text preserving meaning. Return only the rewritten text.",
+  preset: "paraphrase",
   placeholder: "Paste text to paraphrase...",
   defaultState: { tone: "neutral" },
   controls: (s, set) => <Field label="Tone"><Select value={s.tone} onChange={(e) => set({ ...s, tone: e.target.value })}><option>neutral</option><option>formal</option><option>casual</option><option>professional</option><option>friendly</option></Select></Field>,
@@ -58,7 +58,7 @@ export const AIParaphraser = makePromptTool({
 });
 
 export const AITranslator = makePromptTool({
-  system: "You are a precise translator. Translate the text to the requested language. Return only the translation.",
+  preset: "translate",
   placeholder: "Paste text to translate...",
   defaultState: { lang: "Spanish" },
   controls: (s, set) => <Field label="Target language"><Select value={s.lang} onChange={(e) => set({ ...s, lang: e.target.value })}>{["Spanish","French","German","Italian","Portuguese","Hindi","Nepali","Bengali","Arabic","Chinese","Japanese","Korean","Russian","English"].map(l => <option key={l}>{l}</option>)}</Select></Field>,
@@ -66,13 +66,13 @@ export const AITranslator = makePromptTool({
 });
 
 export const AICoverLetter = makePromptTool({
-  system: "You are an expert career writer. Generate a tailored, concise cover letter (~250 words) based on the user's notes.",
+  preset: "cover-letter",
   placeholder: "Describe your role, target job, and key strengths...",
   buildUser: (t) => `Write a professional cover letter based on:\n\n${t}`,
 });
 
 export const AIBlogGenerator = makePromptTool({
-  system: "You are a skilled blog writer. Write engaging, SEO-friendly blog posts with headings, intro and conclusion.",
+  preset: "blog",
   placeholder: "Topic, audience, key points...",
   defaultState: { len: "medium" },
   controls: (s, set) => <Field label="Length"><Select value={s.len} onChange={(e) => set({ ...s, len: e.target.value })}><option>short</option><option>medium</option><option>long</option></Select></Field>,
@@ -80,7 +80,7 @@ export const AIBlogGenerator = makePromptTool({
 });
 
 export const AIEmailWriter = makePromptTool({
-  system: "You are a professional email writer. Compose clear, polite emails with subject line.",
+  preset: "email",
   placeholder: "What's the email about? Who is it to?",
   defaultState: { tone: "professional" },
   controls: (s, set) => <Field label="Tone"><Select value={s.tone} onChange={(e) => set({ ...s, tone: e.target.value })}><option>professional</option><option>friendly</option><option>formal</option><option>persuasive</option><option>apologetic</option></Select></Field>,
@@ -88,13 +88,13 @@ export const AIEmailWriter = makePromptTool({
 });
 
 export const AIResumeBuilder = makePromptTool({
-  system: "You are an expert resume writer. Build a clean, ATS-friendly resume in markdown with sections: Summary, Experience, Education, Skills.",
+  preset: "resume",
   placeholder: "Name, role, experience, education, skills...",
   buildUser: (t) => `Build a professional resume in markdown from:\n\n${t}`,
 });
 
 export const AIQuestionGenerator = makePromptTool({
-  system: "You are a quiz creator. Generate clear multiple-choice questions with 4 options each and mark the correct one.",
+  preset: "questions",
   placeholder: "Topic or text to base questions on...",
   defaultState: { n: "5" },
   controls: (s, set) => <Field label="Number of questions"><Input type="number" value={s.n} onChange={(e) => set({ ...s, n: e.target.value })} /></Field>,
@@ -102,12 +102,13 @@ export const AIQuestionGenerator = makePromptTool({
 });
 
 export const AINotesGenerator = makePromptTool({
-  system: "You are an expert study-notes creator. Convert the content into organized notes with headings, bullets, key terms, and action items.",
+  preset: "notes",
   placeholder: "Paste lecture, meeting, article, or PDF text...",
   defaultState: { style: "study" },
   controls: (s, set) => <Field label="Notes style"><Select value={s.style} onChange={(e) => set({ ...s, style: e.target.value })}><option>study</option><option>meeting</option><option>outline</option><option>revision</option></Select></Field>,
   buildUser: (t, s) => `Create ${s.style} notes from:\n\n${t}`,
 });
+
 
 export function AIPdfSummarizer() {
   const [files, setFiles] = useState<File[]>([]);
