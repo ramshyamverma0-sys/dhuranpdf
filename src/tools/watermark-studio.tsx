@@ -405,8 +405,6 @@ export function WatermarkStudio({ mode = "pdf" }: { mode?: "pdf" | "image" }) {
               x: rx, y: ry, size, font, color: rgb(c.r, c.g, c.b),
               rotate: degrees(l.rotation), opacity: l.opacity,
             });
-            void tw;
-            });
             if (l.underline) {
               // underline as line: draw a thin rect via drawLine
               const ux1 = x + (-tw / 2) * Math.cos(rot) - (-th * 0.6) * Math.sin(rot);
