@@ -14,11 +14,27 @@ import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AllToolsRouteImport } from './routes/all-tools'
+import { Route as AiHubRouteImport } from './routes/ai-hub'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AiHubIndexRouteImport } from './routes/ai-hub.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
+import { Route as AiHubTutorialsRouteImport } from './routes/ai-hub.tutorials'
+import { Route as AiHubResourcesRouteImport } from './routes/ai-hub.resources'
+import { Route as AiHubPromptsRouteImport } from './routes/ai-hub.prompts'
+import { Route as AiHubNewsRouteImport } from './routes/ai-hub.news'
+import { Route as AiHubDirectoryRouteImport } from './routes/ai-hub.directory'
+import { Route as AiHubComparisonsRouteImport } from './routes/ai-hub.comparisons'
+import { Route as AiHubCollectionsRouteImport } from './routes/ai-hub.collections'
+import { Route as AiHubBlogRouteImport } from './routes/ai-hub.blog'
+import { Route as AiHubTutorialsSlugRouteImport } from './routes/ai-hub.tutorials.$slug'
+import { Route as AiHubToolSlugRouteImport } from './routes/ai-hub.tool.$slug'
+import { Route as AiHubPromptsSlugRouteImport } from './routes/ai-hub.prompts.$slug'
+import { Route as AiHubComparisonsSlugRouteImport } from './routes/ai-hub.comparisons.$slug'
+import { Route as AiHubCollectionsSlugRouteImport } from './routes/ai-hub.collections.$slug'
+import { Route as AiHubBlogSlugRouteImport } from './routes/ai-hub.blog.$slug'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -45,6 +61,11 @@ const AllToolsRoute = AllToolsRouteImport.update({
   path: '/all-tools',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiHubRoute = AiHubRouteImport.update({
+  id: '/ai-hub',
+  path: '/ai-hub',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
@@ -60,6 +81,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiHubIndexRoute = AiHubIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AiHubRoute,
+} as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
@@ -70,18 +96,104 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   path: '/category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiHubTutorialsRoute = AiHubTutorialsRouteImport.update({
+  id: '/tutorials',
+  path: '/tutorials',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubResourcesRoute = AiHubResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubPromptsRoute = AiHubPromptsRouteImport.update({
+  id: '/prompts',
+  path: '/prompts',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubNewsRoute = AiHubNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubDirectoryRoute = AiHubDirectoryRouteImport.update({
+  id: '/directory',
+  path: '/directory',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubComparisonsRoute = AiHubComparisonsRouteImport.update({
+  id: '/comparisons',
+  path: '/comparisons',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubCollectionsRoute = AiHubCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubBlogRoute = AiHubBlogRouteImport.update({
+  id: '/blog',
+  path: '/blog',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubTutorialsSlugRoute = AiHubTutorialsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AiHubTutorialsRoute,
+} as any)
+const AiHubToolSlugRoute = AiHubToolSlugRouteImport.update({
+  id: '/tool/$slug',
+  path: '/tool/$slug',
+  getParentRoute: () => AiHubRoute,
+} as any)
+const AiHubPromptsSlugRoute = AiHubPromptsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AiHubPromptsRoute,
+} as any)
+const AiHubComparisonsSlugRoute = AiHubComparisonsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AiHubComparisonsRoute,
+} as any)
+const AiHubCollectionsSlugRoute = AiHubCollectionsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AiHubCollectionsRoute,
+} as any)
+const AiHubBlogSlugRoute = AiHubBlogSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => AiHubBlogRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ai-hub': typeof AiHubRouteWithChildren
   '/all-tools': typeof AllToolsRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai-hub/blog': typeof AiHubBlogRouteWithChildren
+  '/ai-hub/collections': typeof AiHubCollectionsRouteWithChildren
+  '/ai-hub/comparisons': typeof AiHubComparisonsRouteWithChildren
+  '/ai-hub/directory': typeof AiHubDirectoryRoute
+  '/ai-hub/news': typeof AiHubNewsRoute
+  '/ai-hub/prompts': typeof AiHubPromptsRouteWithChildren
+  '/ai-hub/resources': typeof AiHubResourcesRoute
+  '/ai-hub/tutorials': typeof AiHubTutorialsRouteWithChildren
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai-hub/': typeof AiHubIndexRoute
+  '/ai-hub/blog/$slug': typeof AiHubBlogSlugRoute
+  '/ai-hub/collections/$slug': typeof AiHubCollectionsSlugRoute
+  '/ai-hub/comparisons/$slug': typeof AiHubComparisonsSlugRoute
+  '/ai-hub/prompts/$slug': typeof AiHubPromptsSlugRoute
+  '/ai-hub/tool/$slug': typeof AiHubToolSlugRoute
+  '/ai-hub/tutorials/$slug': typeof AiHubTutorialsSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -92,21 +204,52 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai-hub/blog': typeof AiHubBlogRouteWithChildren
+  '/ai-hub/collections': typeof AiHubCollectionsRouteWithChildren
+  '/ai-hub/comparisons': typeof AiHubComparisonsRouteWithChildren
+  '/ai-hub/directory': typeof AiHubDirectoryRoute
+  '/ai-hub/news': typeof AiHubNewsRoute
+  '/ai-hub/prompts': typeof AiHubPromptsRouteWithChildren
+  '/ai-hub/resources': typeof AiHubResourcesRoute
+  '/ai-hub/tutorials': typeof AiHubTutorialsRouteWithChildren
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai-hub': typeof AiHubIndexRoute
+  '/ai-hub/blog/$slug': typeof AiHubBlogSlugRoute
+  '/ai-hub/collections/$slug': typeof AiHubCollectionsSlugRoute
+  '/ai-hub/comparisons/$slug': typeof AiHubComparisonsSlugRoute
+  '/ai-hub/prompts/$slug': typeof AiHubPromptsSlugRoute
+  '/ai-hub/tool/$slug': typeof AiHubToolSlugRoute
+  '/ai-hub/tutorials/$slug': typeof AiHubTutorialsSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
+  '/ai-hub': typeof AiHubRouteWithChildren
   '/all-tools': typeof AllToolsRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai-hub/blog': typeof AiHubBlogRouteWithChildren
+  '/ai-hub/collections': typeof AiHubCollectionsRouteWithChildren
+  '/ai-hub/comparisons': typeof AiHubComparisonsRouteWithChildren
+  '/ai-hub/directory': typeof AiHubDirectoryRoute
+  '/ai-hub/news': typeof AiHubNewsRoute
+  '/ai-hub/prompts': typeof AiHubPromptsRouteWithChildren
+  '/ai-hub/resources': typeof AiHubResourcesRoute
+  '/ai-hub/tutorials': typeof AiHubTutorialsRouteWithChildren
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai-hub/': typeof AiHubIndexRoute
+  '/ai-hub/blog/$slug': typeof AiHubBlogSlugRoute
+  '/ai-hub/collections/$slug': typeof AiHubCollectionsSlugRoute
+  '/ai-hub/comparisons/$slug': typeof AiHubComparisonsSlugRoute
+  '/ai-hub/prompts/$slug': typeof AiHubPromptsSlugRoute
+  '/ai-hub/tool/$slug': typeof AiHubToolSlugRoute
+  '/ai-hub/tutorials/$slug': typeof AiHubTutorialsSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -114,13 +257,29 @@ export interface FileRouteTypes {
     | '/'
     | '/about'
     | '/admin'
+    | '/ai-hub'
     | '/all-tools'
     | '/contact'
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai-hub/blog'
+    | '/ai-hub/collections'
+    | '/ai-hub/comparisons'
+    | '/ai-hub/directory'
+    | '/ai-hub/news'
+    | '/ai-hub/prompts'
+    | '/ai-hub/resources'
+    | '/ai-hub/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai-hub/'
+    | '/ai-hub/blog/$slug'
+    | '/ai-hub/collections/$slug'
+    | '/ai-hub/comparisons/$slug'
+    | '/ai-hub/prompts/$slug'
+    | '/ai-hub/tool/$slug'
+    | '/ai-hub/tutorials/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -131,26 +290,58 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai-hub/blog'
+    | '/ai-hub/collections'
+    | '/ai-hub/comparisons'
+    | '/ai-hub/directory'
+    | '/ai-hub/news'
+    | '/ai-hub/prompts'
+    | '/ai-hub/resources'
+    | '/ai-hub/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai-hub'
+    | '/ai-hub/blog/$slug'
+    | '/ai-hub/collections/$slug'
+    | '/ai-hub/comparisons/$slug'
+    | '/ai-hub/prompts/$slug'
+    | '/ai-hub/tool/$slug'
+    | '/ai-hub/tutorials/$slug'
   id:
     | '__root__'
     | '/'
     | '/about'
     | '/admin'
+    | '/ai-hub'
     | '/all-tools'
     | '/contact'
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai-hub/blog'
+    | '/ai-hub/collections'
+    | '/ai-hub/comparisons'
+    | '/ai-hub/directory'
+    | '/ai-hub/news'
+    | '/ai-hub/prompts'
+    | '/ai-hub/resources'
+    | '/ai-hub/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai-hub/'
+    | '/ai-hub/blog/$slug'
+    | '/ai-hub/collections/$slug'
+    | '/ai-hub/comparisons/$slug'
+    | '/ai-hub/prompts/$slug'
+    | '/ai-hub/tool/$slug'
+    | '/ai-hub/tutorials/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
+  AiHubRoute: typeof AiHubRouteWithChildren
   AllToolsRoute: typeof AllToolsRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -197,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AllToolsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-hub': {
+      id: '/ai-hub'
+      path: '/ai-hub'
+      fullPath: '/ai-hub'
+      preLoaderRoute: typeof AiHubRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -218,6 +416,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-hub/': {
+      id: '/ai-hub/'
+      path: '/'
+      fullPath: '/ai-hub/'
+      preLoaderRoute: typeof AiHubIndexRouteImport
+      parentRoute: typeof AiHubRoute
+    }
     '/tools/$slug': {
       id: '/tools/$slug'
       path: '/tools/$slug'
@@ -232,13 +437,198 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-hub/tutorials': {
+      id: '/ai-hub/tutorials'
+      path: '/tutorials'
+      fullPath: '/ai-hub/tutorials'
+      preLoaderRoute: typeof AiHubTutorialsRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/resources': {
+      id: '/ai-hub/resources'
+      path: '/resources'
+      fullPath: '/ai-hub/resources'
+      preLoaderRoute: typeof AiHubResourcesRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/prompts': {
+      id: '/ai-hub/prompts'
+      path: '/prompts'
+      fullPath: '/ai-hub/prompts'
+      preLoaderRoute: typeof AiHubPromptsRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/news': {
+      id: '/ai-hub/news'
+      path: '/news'
+      fullPath: '/ai-hub/news'
+      preLoaderRoute: typeof AiHubNewsRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/directory': {
+      id: '/ai-hub/directory'
+      path: '/directory'
+      fullPath: '/ai-hub/directory'
+      preLoaderRoute: typeof AiHubDirectoryRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/comparisons': {
+      id: '/ai-hub/comparisons'
+      path: '/comparisons'
+      fullPath: '/ai-hub/comparisons'
+      preLoaderRoute: typeof AiHubComparisonsRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/collections': {
+      id: '/ai-hub/collections'
+      path: '/collections'
+      fullPath: '/ai-hub/collections'
+      preLoaderRoute: typeof AiHubCollectionsRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/blog': {
+      id: '/ai-hub/blog'
+      path: '/blog'
+      fullPath: '/ai-hub/blog'
+      preLoaderRoute: typeof AiHubBlogRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/tutorials/$slug': {
+      id: '/ai-hub/tutorials/$slug'
+      path: '/$slug'
+      fullPath: '/ai-hub/tutorials/$slug'
+      preLoaderRoute: typeof AiHubTutorialsSlugRouteImport
+      parentRoute: typeof AiHubTutorialsRoute
+    }
+    '/ai-hub/tool/$slug': {
+      id: '/ai-hub/tool/$slug'
+      path: '/tool/$slug'
+      fullPath: '/ai-hub/tool/$slug'
+      preLoaderRoute: typeof AiHubToolSlugRouteImport
+      parentRoute: typeof AiHubRoute
+    }
+    '/ai-hub/prompts/$slug': {
+      id: '/ai-hub/prompts/$slug'
+      path: '/$slug'
+      fullPath: '/ai-hub/prompts/$slug'
+      preLoaderRoute: typeof AiHubPromptsSlugRouteImport
+      parentRoute: typeof AiHubPromptsRoute
+    }
+    '/ai-hub/comparisons/$slug': {
+      id: '/ai-hub/comparisons/$slug'
+      path: '/$slug'
+      fullPath: '/ai-hub/comparisons/$slug'
+      preLoaderRoute: typeof AiHubComparisonsSlugRouteImport
+      parentRoute: typeof AiHubComparisonsRoute
+    }
+    '/ai-hub/collections/$slug': {
+      id: '/ai-hub/collections/$slug'
+      path: '/$slug'
+      fullPath: '/ai-hub/collections/$slug'
+      preLoaderRoute: typeof AiHubCollectionsSlugRouteImport
+      parentRoute: typeof AiHubCollectionsRoute
+    }
+    '/ai-hub/blog/$slug': {
+      id: '/ai-hub/blog/$slug'
+      path: '/$slug'
+      fullPath: '/ai-hub/blog/$slug'
+      preLoaderRoute: typeof AiHubBlogSlugRouteImport
+      parentRoute: typeof AiHubBlogRoute
+    }
   }
 }
+
+interface AiHubBlogRouteChildren {
+  AiHubBlogSlugRoute: typeof AiHubBlogSlugRoute
+}
+
+const AiHubBlogRouteChildren: AiHubBlogRouteChildren = {
+  AiHubBlogSlugRoute: AiHubBlogSlugRoute,
+}
+
+const AiHubBlogRouteWithChildren = AiHubBlogRoute._addFileChildren(
+  AiHubBlogRouteChildren,
+)
+
+interface AiHubCollectionsRouteChildren {
+  AiHubCollectionsSlugRoute: typeof AiHubCollectionsSlugRoute
+}
+
+const AiHubCollectionsRouteChildren: AiHubCollectionsRouteChildren = {
+  AiHubCollectionsSlugRoute: AiHubCollectionsSlugRoute,
+}
+
+const AiHubCollectionsRouteWithChildren =
+  AiHubCollectionsRoute._addFileChildren(AiHubCollectionsRouteChildren)
+
+interface AiHubComparisonsRouteChildren {
+  AiHubComparisonsSlugRoute: typeof AiHubComparisonsSlugRoute
+}
+
+const AiHubComparisonsRouteChildren: AiHubComparisonsRouteChildren = {
+  AiHubComparisonsSlugRoute: AiHubComparisonsSlugRoute,
+}
+
+const AiHubComparisonsRouteWithChildren =
+  AiHubComparisonsRoute._addFileChildren(AiHubComparisonsRouteChildren)
+
+interface AiHubPromptsRouteChildren {
+  AiHubPromptsSlugRoute: typeof AiHubPromptsSlugRoute
+}
+
+const AiHubPromptsRouteChildren: AiHubPromptsRouteChildren = {
+  AiHubPromptsSlugRoute: AiHubPromptsSlugRoute,
+}
+
+const AiHubPromptsRouteWithChildren = AiHubPromptsRoute._addFileChildren(
+  AiHubPromptsRouteChildren,
+)
+
+interface AiHubTutorialsRouteChildren {
+  AiHubTutorialsSlugRoute: typeof AiHubTutorialsSlugRoute
+}
+
+const AiHubTutorialsRouteChildren: AiHubTutorialsRouteChildren = {
+  AiHubTutorialsSlugRoute: AiHubTutorialsSlugRoute,
+}
+
+const AiHubTutorialsRouteWithChildren = AiHubTutorialsRoute._addFileChildren(
+  AiHubTutorialsRouteChildren,
+)
+
+interface AiHubRouteChildren {
+  AiHubBlogRoute: typeof AiHubBlogRouteWithChildren
+  AiHubCollectionsRoute: typeof AiHubCollectionsRouteWithChildren
+  AiHubComparisonsRoute: typeof AiHubComparisonsRouteWithChildren
+  AiHubDirectoryRoute: typeof AiHubDirectoryRoute
+  AiHubNewsRoute: typeof AiHubNewsRoute
+  AiHubPromptsRoute: typeof AiHubPromptsRouteWithChildren
+  AiHubResourcesRoute: typeof AiHubResourcesRoute
+  AiHubTutorialsRoute: typeof AiHubTutorialsRouteWithChildren
+  AiHubIndexRoute: typeof AiHubIndexRoute
+  AiHubToolSlugRoute: typeof AiHubToolSlugRoute
+}
+
+const AiHubRouteChildren: AiHubRouteChildren = {
+  AiHubBlogRoute: AiHubBlogRouteWithChildren,
+  AiHubCollectionsRoute: AiHubCollectionsRouteWithChildren,
+  AiHubComparisonsRoute: AiHubComparisonsRouteWithChildren,
+  AiHubDirectoryRoute: AiHubDirectoryRoute,
+  AiHubNewsRoute: AiHubNewsRoute,
+  AiHubPromptsRoute: AiHubPromptsRouteWithChildren,
+  AiHubResourcesRoute: AiHubResourcesRoute,
+  AiHubTutorialsRoute: AiHubTutorialsRouteWithChildren,
+  AiHubIndexRoute: AiHubIndexRoute,
+  AiHubToolSlugRoute: AiHubToolSlugRoute,
+}
+
+const AiHubRouteWithChildren = AiHubRoute._addFileChildren(AiHubRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
+  AiHubRoute: AiHubRouteWithChildren,
   AllToolsRoute: AllToolsRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,

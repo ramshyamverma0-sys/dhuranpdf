@@ -1,20 +1,18 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState, useMemo } from "react";
-import { z } from "zod";
-import { zodValidator } from "@tanstack/zod-adapter";
 import { AI_TOOLS, AI_CATEGORIES } from "@/ai-hub/data";
 import { AIToolCard } from "@/ai-hub/components";
 import { Search, X, SlidersHorizontal } from "lucide-react";
 
-const SearchSchema = z.object({
-  q: z.string().optional(),
-  category: z.string().optional(),
-  filter: z.string().optional(),
-  sort: z.enum(["popular","newest","rating","name","updated"]).optional(),
-});
+type DirSearch = { q?: string; category?: string; filter?: string; sort?: string };
 
 export const Route = createFileRoute("/ai-hub/directory")({
-  validateSearch: zodValidator(SearchSchema),
+  validateSearch: (s: Record<string, unknown>): DirSearch => ({
+    q: typeof s.q === "string" ? s.q : undefined,
+    category: typeof s.category === "string" ? s.category : undefined,
+    filter: typeof s.filter === "string" ? s.filter : undefined,
+    sort: typeof s.sort === "string" ? s.sort : undefined,
+  }),
   head: () => ({
     meta: [
       { title: "AI Tools Directory — Dhuran AI Hub" },

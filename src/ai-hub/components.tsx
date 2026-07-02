@@ -126,7 +126,7 @@ export function HubHero({ children, kicker, title, sub }: { kicker?: string; tit
 }
 
 export function HubTabs() {
-  const links = [
+  const links: { to: string; label: string; exact?: boolean }[] = [
     { to: "/ai-hub", label: "Home", exact: true },
     { to: "/ai-hub/directory", label: "Directory" },
     { to: "/ai-hub/prompts", label: "Prompts" },
@@ -136,7 +136,7 @@ export function HubTabs() {
     { to: "/ai-hub/news", label: "News" },
     { to: "/ai-hub/blog", label: "Blog" },
     { to: "/ai-hub/resources", label: "Resources" },
-  ] as const;
+  ];
   return (
     <div className="mb-8 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto">
       <div className="flex gap-1 border-b border-border min-w-max">
