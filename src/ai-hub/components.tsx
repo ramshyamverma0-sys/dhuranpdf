@@ -97,13 +97,7 @@ export function AIToolCard({ tool }: { tool: AITool }) {
       className="group relative flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-soft hover:shadow-card hover:-translate-y-0.5 hover:border-primary/40 transition-all"
     >
       <div className="flex items-start justify-between gap-3">
-        <div
-          className="grid h-11 w-11 place-items-center rounded-xl text-white font-bold text-sm shrink-0"
-          style={{ background: `linear-gradient(135deg, hsl(${hue} 70% 50%), hsl(${(hue + 40) % 360} 70% 45%))` }}
-          aria-hidden
-        >
-          {initials(tool.name)}
-        </div>
+        <ToolLogo name={tool.name} website={tool.website} size={44} />
         <div className="flex items-center gap-1 text-xs">
           <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
           <span className="font-medium">{tool.rating.toFixed(1)}</span>
