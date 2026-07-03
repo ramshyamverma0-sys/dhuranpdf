@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AI_TOOLS, AI_CATEGORIES } from "@/ai-hub/data";
-import { AIToolCard, VisitButton } from "@/ai-hub/components";
+import { AIToolCard, VisitButton, ToolLogo } from "@/ai-hub/components";
 import { Star, Check, X, Bookmark, Share2, Flag, Calendar, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
