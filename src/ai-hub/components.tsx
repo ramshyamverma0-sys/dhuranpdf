@@ -1,8 +1,51 @@
 import { Link } from "@tanstack/react-router";
+import { useState } from "react";
 import * as Icons from "lucide-react";
 import type { AITool, AIHubCategory } from "./data";
 import { cn } from "@/lib/utils";
 import { Star, ArrowRight, ExternalLink, Sparkles } from "lucide-react";
+
+// Extract a clean hostname from a tool website URL.
+function domainOf(url: string): string {
+  try {
+    const u = new URL(url);
+    return u.hostname.replace(/^www\./, "");
+  } catch {
+    return url.replace(/^https?:\/\//, "").replace(/^www\./, "").split("/")[0];
+  }
+}
+
+// Renders the official brand favicon for a tool with a gradient-initials fallback.
+// Uses Google's public favicon service (no API key, works for every domain).
+export function ToolLogo({ name, website, size = 44, rounded = "rounded-xl" }: { name: string; website: string; size?: number; rounded?: string }) {
+  const [failed, setFailed] = useState(false);
+  const domain = domainOf(website);
+  const src = `https://www.google.com/s2/favicons?sz=128&domain=${encodeURIComponent(domain)}`;
+  const hue = hueFrom(name);
+  const px = `${size}px`;
+  if (failed) {
+    return (
+      <div
+        className={cn("grid place-items-center text-white font-bold shrink-0", rounded)}
+        style={{ width: px, height: px, fontSize: size * 0.32, background: `linear-gradient(135deg, hsl(${hue} 70% 50%), hsl(${(hue + 40) % 360} 70% 45%))` }}
+        aria-hidden
+      >
+        {initials(name)}
+      </div>
+    );
+  }
+  return (
+    <div className={cn("grid place-items-center bg-white dark:bg-white/95 border border-border shrink-0 overflow-hidden", rounded)} style={{ width: px, height: px }}>
+      <img
+        src={src}
+        alt={`${name} logo`}
+        loading="lazy"
+        onError={() => setFailed(true)}
+        style={{ width: size * 0.7, height: size * 0.7, objectFit: "contain" }}
+      />
+    </div>
+  );
+}
 
 export function CatIcon({ name, className }: { name: string; className?: string }) {
   const C = (Icons as any)[name] || Icons.Sparkles;
@@ -46,7 +89,7 @@ function hueFrom(name: string) {
 }
 
 export function AIToolCard({ tool }: { tool: AITool }) {
-  const hue = hueFrom(tool.name);
+
   return (
     <Link
       to="/ai-hub/tool/$slug"
@@ -54,13 +97,7 @@ export function AIToolCard({ tool }: { tool: AITool }) {
       className="group relative flex flex-col gap-3 rounded-xl border border-border bg-card p-4 shadow-soft hover:shadow-card hover:-translate-y-0.5 hover:border-primary/40 transition-all"
     >
       <div className="flex items-start justify-between gap-3">
-        <div
-          className="grid h-11 w-11 place-items-center rounded-xl text-white font-bold text-sm shrink-0"
-          style={{ background: `linear-gradient(135deg, hsl(${hue} 70% 50%), hsl(${(hue + 40) % 360} 70% 45%))` }}
-          aria-hidden
-        >
-          {initials(tool.name)}
-        </div>
+        <ToolLogo name={tool.name} website={tool.website} size={44} />
         <div className="flex items-center gap-1 text-xs">
           <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
           <span className="font-medium">{tool.rating.toFixed(1)}</span>

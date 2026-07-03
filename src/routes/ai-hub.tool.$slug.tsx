@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { AI_TOOLS, AI_CATEGORIES } from "@/ai-hub/data";
-import { AIToolCard, VisitButton } from "@/ai-hub/components";
+import { AIToolCard, VisitButton, ToolLogo } from "@/ai-hub/components";
 import { Star, Check, X, Bookmark, Share2, Flag, Calendar, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 
@@ -69,7 +69,7 @@ function ToolPage() {
       <div>
         <div className="rounded-2xl border border-border bg-card p-6 shadow-soft">
           <div className="flex items-start gap-4">
-            <div className="grid h-16 w-16 place-items-center rounded-2xl bg-primary/10 text-primary font-bold text-xl">{tool.name.slice(0, 2)}</div>
+            <ToolLogo name={tool.name} website={tool.website} size={64} rounded="rounded-2xl" />
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-2xl sm:text-3xl font-bold truncate">{tool.name}</h1>
