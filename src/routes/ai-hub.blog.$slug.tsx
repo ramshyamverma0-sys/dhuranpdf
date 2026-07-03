@@ -50,9 +50,9 @@ function BlogPost() {
           <button onClick={share} className="ml-auto inline-flex items-center gap-1 text-sm hover:text-primary"><Share2 className="h-3 w-3" /> Share</button>
         </div>
         <div className="prose prose-neutral dark:prose-invert mt-8 max-w-none">
-          {post.body.split("\n").map((para, i) => <p key={i}>{para}</p>)}
+          {post.body.split("\n").map((para: string, i: number) => <p key={i}>{para}</p>)}
         </div>
-        <div className="mt-6 flex flex-wrap gap-1.5">{post.tags.map((t) => <span key={t} className="text-xs px-2 py-0.5 rounded-full border border-border">#{t}</span>)}</div>
+        <div className="mt-6 flex flex-wrap gap-1.5">{post.tags.map((t: string) => <span key={t} className="text-xs px-2 py-0.5 rounded-full border border-border">#{t}</span>)}</div>
       </article>
       {related.length > 0 && (
         <div className="mt-12 max-w-3xl">

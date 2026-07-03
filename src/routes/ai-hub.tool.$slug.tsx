@@ -43,10 +43,10 @@ export const Route = createFileRoute("/ai-hub/tool/$slug")({
 });
 
 function ToolPage() {
-  const { tool } = Route.useLoaderData();
+  const { tool } = Route.useLoaderData() as { tool: typeof AI_TOOLS[number] };
   const cat = AI_CATEGORIES.find((c) => c.slug === tool.category);
   const related = AI_TOOLS.filter((t) => t.category === tool.category && t.slug !== tool.slug).slice(0, 4);
-  const alternatives = (tool.alternatives || []).map((slug) => AI_TOOLS.find((x) => x.slug === slug)).filter(Boolean) as typeof AI_TOOLS;
+  const alternatives = (tool.alternatives || []).map((slug: string) => AI_TOOLS.find((x) => x.slug === slug)).filter(Boolean) as typeof AI_TOOLS;
 
   const share = async () => {
     const url = typeof window !== "undefined" ? window.location.href : "";

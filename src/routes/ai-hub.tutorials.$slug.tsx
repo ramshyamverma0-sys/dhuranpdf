@@ -28,7 +28,7 @@ function TutorialPage() {
       <h1 className="text-3xl sm:text-4xl font-bold mt-2">{t.title}</h1>
       <p className="text-muted-foreground mt-3 text-lg">{t.description}</p>
       <div className="prose prose-neutral dark:prose-invert mt-8 max-w-none">
-        {t.body.split("\n").map((para, i) => <p key={i}>{para}</p>)}
+        {t.body.split("\n").map((para: string, i: number) => <p key={i}>{para}</p>)}
       </div>
     </article>
   );

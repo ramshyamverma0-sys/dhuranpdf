@@ -35,7 +35,7 @@ function ComparisonPage() {
             </tr>
           </thead>
           <tbody>
-            {c.sections.map((s) => (
+            {c.sections.map((s: { title: string; a: string; b: string }) => (
               <tr key={s.title} className="border-t border-border">
                 <td className="p-3 font-medium bg-surface/50">{s.title}</td>
                 <td className="p-3">{s.a}</td>
