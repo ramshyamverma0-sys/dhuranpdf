@@ -89,7 +89,7 @@ function hueFrom(name: string) {
 }
 
 export function AIToolCard({ tool }: { tool: AITool }) {
-  const hue = hueFrom(tool.name);
+
   return (
     <Link
       to="/ai-hub/tool/$slug"
