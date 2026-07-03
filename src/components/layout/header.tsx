@@ -79,7 +79,7 @@ export function Header() {
           <div className="px-4 py-3 space-y-1">
             <Link to="/" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">Home</Link>
             <Link to="/all-tools" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">All Tools</Link>
-            <Link to="/ai-hub" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm font-medium text-primary">✨ AI Hub</Link>
+            
             {CATEGORIES.slice(0, 6).map((c) => (
               <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} onClick={() => setMobileOpen(false)} className={cn("block px-3 py-2 rounded-md hover:bg-accent text-sm")}>{c.name}</Link>
             ))}
