@@ -37,8 +37,11 @@ export function Header() {
         <nav className="hidden md:flex items-center gap-1 ml-4">
           <Link to="/" activeOptions={{ exact: true }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition" activeProps={{ className: "text-primary font-semibold" }}>Home</Link>
           <Link to="/all-tools" className="px-3 py-2 text-sm rounded-md hover:bg-accent transition" activeProps={{ className: "text-primary font-semibold" }}>All Tools</Link>
+          <Link to="/ai-hub" className="px-3 py-2 text-sm rounded-md hover:bg-accent transition inline-flex items-center gap-1.5" activeProps={{ className: "text-primary font-semibold" }}>
+            <span className="inline-grid h-4 w-4 place-items-center rounded primary-gradient text-[9px] font-bold">AI</span>
+            Hub
+          </Link>
           <Link to="/category/$slug" params={{ slug: "pdf" }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition">PDF</Link>
-          <Link to="/category/$slug" params={{ slug: "ai" }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition">AI</Link>
           <Link to="/category/$slug" params={{ slug: "finance" }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition">Finance</Link>
         </nav>
 
