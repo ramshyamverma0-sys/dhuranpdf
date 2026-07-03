@@ -53,7 +53,7 @@ function PromptDetail() {
           </div>
           <pre className="whitespace-pre-wrap text-sm bg-surface border border-border rounded-lg p-4 font-mono leading-relaxed">{prompt.prompt}</pre>
         </div>
-        <div className="mt-6 flex flex-wrap gap-1.5">{prompt.tags.map((t) => <span key={t} className="text-xs px-2 py-0.5 rounded-full border border-border">#{t}</span>)}</div>
+        <div className="mt-6 flex flex-wrap gap-1.5">{prompt.tags.map((t: string) => <span key={t} className="text-xs px-2 py-0.5 rounded-full border border-border">#{t}</span>)}</div>
       </div>
     </div>
   );
