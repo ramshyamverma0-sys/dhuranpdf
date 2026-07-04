@@ -40,7 +40,7 @@ function AdminPanel() {
   const analytics = { total: tools.length, enabled: tools.filter(t => t.enabled).length, disabled: tools.filter(t => !t.enabled).length, categories: new Set(tools.map(t => t.category)).size };
 
   return <main className="container py-8 space-y-6">
-    <div><h1 className="text-3xl font-bold">Dhuran PDF Admin Panel</h1><p className="text-muted-foreground">Manage tools, categories, icons and local analytics.</p></div>
+    <div><h1 className="text-3xl font-bold">DhuranHub Admin Panel</h1><p className="text-muted-foreground">Manage tools, categories, icons and local analytics.</p></div>
     <div className="grid gap-4 sm:grid-cols-4">{Object.entries(analytics).map(([k, v]) => <ResultBox key={k}><div className="text-xs uppercase text-muted-foreground">{k}</div><div className="text-2xl font-bold">{v}</div></ResultBox>)}</div>
     <div className="grid gap-6 lg:grid-cols-[320px_1fr]">
       <section className="rounded-2xl border bg-card p-4 space-y-3">

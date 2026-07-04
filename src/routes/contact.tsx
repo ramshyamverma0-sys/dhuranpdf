@@ -7,8 +7,8 @@ import { toast } from "sonner";
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
-      { title: "Contact — Dhuran PDF" },
-      { name: "description", content: "Get in touch with Dhuran PDF — feedback, tool requests, partnerships." },
+      { title: "Contact — DhuranHub" },
+      { name: "description", content: "Get in touch with DhuranHub — feedback, tool requests, partnerships." },
     ],
   }),
   component: Contact,

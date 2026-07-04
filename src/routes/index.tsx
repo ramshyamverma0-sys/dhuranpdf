@@ -6,7 +6,7 @@ import { ArrowRight, Shield, Zap, Sparkles, Cloud, CheckCircle2 } from "lucide-r
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Dhuran PDF — All PDF & Smart AI Tools In One Place" },
+      { title: "DhuranHub — All PDF & Smart AI Tools In One Place" },
       { name: "description", content: "200+ free online tools: merge, split, compress PDF, EMI/SIP/BMI calculators, unit converters, AI summarizer, QR generator and more. Fast, private, beautiful." },
     ],
   }),

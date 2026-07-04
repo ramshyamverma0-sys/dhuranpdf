@@ -31,12 +31,13 @@ export function Header() {
           <span className="grid h-9 w-9 place-items-center rounded-xl primary-gradient shadow-soft">
             <FileText className="h-5 w-5" />
           </span>
-          <span className="text-lg font-bold tracking-tight">Dhuran <span className="text-primary">PDF</span></span>
+          <span className="text-lg font-bold tracking-tight">Dhuran<span className="text-primary">Hub</span></span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 ml-4">
           <Link to="/" activeOptions={{ exact: true }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition" activeProps={{ className: "text-primary font-semibold" }}>Home</Link>
           <Link to="/all-tools" className="px-3 py-2 text-sm rounded-md hover:bg-accent transition" activeProps={{ className: "text-primary font-semibold" }}>All Tools</Link>
+          <Link to="/ai" className="px-3 py-2 text-sm rounded-md hover:bg-accent transition" activeProps={{ className: "text-primary font-semibold" }}>AI Hub</Link>
           <Link to="/category/$slug" params={{ slug: "pdf" }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition">PDF</Link>
           <Link to="/category/$slug" params={{ slug: "finance" }} className="px-3 py-2 text-sm rounded-md hover:bg-accent transition">Finance</Link>
         </nav>
@@ -79,6 +80,8 @@ export function Header() {
           <div className="px-4 py-3 space-y-1">
             <Link to="/" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">Home</Link>
             <Link to="/all-tools" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">All Tools</Link>
+            <Link to="/ai" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">AI Hub</Link>
+            
             
             {CATEGORIES.slice(0, 6).map((c) => (
               <Link key={c.slug} to="/category/$slug" params={{ slug: c.slug }} onClick={() => setMobileOpen(false)} className={cn("block px-3 py-2 rounded-md hover:bg-accent text-sm")}>{c.name}</Link>

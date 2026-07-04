@@ -7,7 +7,7 @@ import { Search } from "lucide-react";
 export const Route = createFileRoute("/all-tools")({
   head: () => ({
     meta: [
-      { title: "All Tools — Dhuran PDF" },
+      { title: "All Tools — DhuranHub" },
       { name: "description", content: "Browse all 200+ tools: PDF, AI, calculators, converters, image, video, developer, utility tools and more." },
     ],
   }),
@@ -31,7 +31,7 @@ function AllTools() {
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
       <div className="text-center max-w-2xl mx-auto">
         <h1 className="text-3xl sm:text-4xl font-bold tracking-tight">All Tools</h1>
-        <p className="mt-2 text-muted-foreground">Explore everything Dhuran PDF has to offer — {TOOLS.length} tools and growing.</p>
+        <p className="mt-2 text-muted-foreground">Explore everything DhuranHub has to offer — {TOOLS.length} tools and growing.</p>
       </div>
 
       <div className="mt-8 relative max-w-xl mx-auto">
