@@ -12,7 +12,7 @@ export function Footer() {
               <span className="grid h-8 w-8 place-items-center rounded-lg primary-gradient">
                 <FileText className="h-4 w-4" />
               </span>
-              <span className="font-bold">Dhuran <span className="text-primary">PDF</span></span>
+              <span className="font-bold">Dhuran<span className="text-primary">Hub</span></span>
             </Link>
             <p className="mt-3 text-sm text-muted-foreground">All PDF & Smart AI Tools In One Place. 200+ free online tools.</p>
           </div>
@@ -47,7 +47,7 @@ export function Footer() {
           </div>
         </div>
         <div className="mt-10 pt-6 border-t border-border text-xs text-muted-foreground flex flex-wrap justify-between gap-3">
-          <span>© {new Date().getFullYear()} Dhuran PDF. All rights reserved.</span>
+          <span>© {new Date().getFullYear()} DhuranHub. All rights reserved.</span>
           <span>Built with care for the world.</span>
         </div>
       </div>

@@ -13,9 +13,9 @@ export const Route = createFileRoute("/category/$slug")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.cat.name} — Dhuran PDF` },
+          { title: `${loaderData.cat.name} — DhuranHub` },
           { name: "description", content: loaderData.cat.description },
-          { property: "og:title", content: `${loaderData.cat.name} — Dhuran PDF` },
+          { property: "og:title", content: `${loaderData.cat.name} — DhuranHub` },
           { property: "og:description", content: loaderData.cat.description },
         ]
       : [],

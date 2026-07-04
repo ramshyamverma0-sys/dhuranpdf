@@ -15,9 +15,9 @@ export const Route = createFileRoute("/tools/$slug")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.tool.name} — Dhuran PDF` },
+          { title: `${loaderData.tool.name} — DhuranHub` },
           { name: "description", content: loaderData.tool.description },
-          { property: "og:title", content: `${loaderData.tool.name} — Dhuran PDF` },
+          { property: "og:title", content: `${loaderData.tool.name} — DhuranHub` },
           { property: "og:description", content: loaderData.tool.description },
         ]
       : [],

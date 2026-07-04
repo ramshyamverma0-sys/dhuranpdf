@@ -31,7 +31,7 @@ export function Header() {
           <span className="grid h-9 w-9 place-items-center rounded-xl primary-gradient shadow-soft">
             <FileText className="h-5 w-5" />
           </span>
-          <span className="text-lg font-bold tracking-tight">Dhuran <span className="text-primary">PDF</span></span>
+          <span className="text-lg font-bold tracking-tight">Dhuran<span className="text-primary">Hub</span></span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-1 ml-4">
