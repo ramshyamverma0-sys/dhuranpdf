@@ -11,6 +11,8 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const aiActive = pathname === "/ai" || pathname.startsWith("/ai/");
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
