@@ -1,5 +1,5 @@
-import { Link } from "@tanstack/react-router";
-import { Moon, Sun, Search, FileText, Menu, X } from "lucide-react";
+import { Link, useRouterState } from "@tanstack/react-router";
+import { Moon, Sun, Search, FileText, Menu, X, Sparkles } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "@/components/theme-provider";
 import { TOOLS, CATEGORIES } from "@/lib/tools";
