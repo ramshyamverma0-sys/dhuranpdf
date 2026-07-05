@@ -115,7 +115,15 @@ export function Header() {
           <div className="px-4 py-3 space-y-1">
             <Link to="/" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">Home</Link>
             <Link to="/all-tools" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">All Tools</Link>
-            <Link to="/ai" onClick={() => setMobileOpen(false)} className="block px-3 py-2 rounded-md hover:bg-accent text-sm">AI Hub</Link>
+            <Link
+              to="/ai"
+              onClick={() => setMobileOpen(false)}
+              aria-label="AI Hub — Discover 2,500+ verified AI tools"
+              className="flex items-center justify-between gap-2 rounded-full px-3.5 py-2 text-sm font-semibold text-white bg-[linear-gradient(120deg,#2563eb,#7c3aed)] shadow-[0_6px_20px_-4px_rgba(124,58,237,0.55)] border border-white/15"
+            >
+              <span className="flex items-center gap-1.5"><Sparkles className="h-4 w-4" aria-hidden /> AI Hub</span>
+              <span className="rounded-full bg-pink-500 px-1.5 py-0.5 text-[9px] font-bold leading-none text-white">NEW</span>
+            </Link>
             
             
             {CATEGORIES.slice(0, 6).map((c) => (
