@@ -18,8 +18,21 @@ import { Route as AiRouteImport } from './routes/ai'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AiIndexRouteImport } from './routes/ai.index'
 import { Route as ToolsSlugRouteImport } from './routes/tools.$slug'
 import { Route as CategorySlugRouteImport } from './routes/category.$slug'
+import { Route as AiTutorialsRouteImport } from './routes/ai.tutorials'
+import { Route as AiToolsRouteImport } from './routes/ai.tools'
+import { Route as AiResourcesRouteImport } from './routes/ai.resources'
+import { Route as AiPromptsRouteImport } from './routes/ai.prompts'
+import { Route as AiNewsRouteImport } from './routes/ai.news'
+import { Route as AiModelsRouteImport } from './routes/ai.models'
+import { Route as AiMarketplaceRouteImport } from './routes/ai.marketplace'
+import { Route as AiComparisonsRouteImport } from './routes/ai.comparisons'
+import { Route as AiCollectionsRouteImport } from './routes/ai.collections'
+import { Route as AiCategoriesRouteImport } from './routes/ai.categories'
+import { Route as AiToolSlugRouteImport } from './routes/ai.tool.$slug'
+import { Route as AiCategorySlugRouteImport } from './routes/ai.category.$slug'
 
 const TermsRoute = TermsRouteImport.update({
   id: '/terms',
@@ -66,6 +79,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiIndexRoute = AiIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AiRoute,
+} as any)
 const ToolsSlugRoute = ToolsSlugRouteImport.update({
   id: '/tools/$slug',
   path: '/tools/$slug',
@@ -76,46 +94,144 @@ const CategorySlugRoute = CategorySlugRouteImport.update({
   path: '/category/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiTutorialsRoute = AiTutorialsRouteImport.update({
+  id: '/tutorials',
+  path: '/tutorials',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiToolsRoute = AiToolsRouteImport.update({
+  id: '/tools',
+  path: '/tools',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiResourcesRoute = AiResourcesRouteImport.update({
+  id: '/resources',
+  path: '/resources',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiPromptsRoute = AiPromptsRouteImport.update({
+  id: '/prompts',
+  path: '/prompts',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiNewsRoute = AiNewsRouteImport.update({
+  id: '/news',
+  path: '/news',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiModelsRoute = AiModelsRouteImport.update({
+  id: '/models',
+  path: '/models',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiMarketplaceRoute = AiMarketplaceRouteImport.update({
+  id: '/marketplace',
+  path: '/marketplace',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiComparisonsRoute = AiComparisonsRouteImport.update({
+  id: '/comparisons',
+  path: '/comparisons',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiCollectionsRoute = AiCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiCategoriesRoute = AiCategoriesRouteImport.update({
+  id: '/categories',
+  path: '/categories',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiToolSlugRoute = AiToolSlugRouteImport.update({
+  id: '/tool/$slug',
+  path: '/tool/$slug',
+  getParentRoute: () => AiRoute,
+} as any)
+const AiCategorySlugRoute = AiCategorySlugRouteImport.update({
+  id: '/category/$slug',
+  path: '/category/$slug',
+  getParentRoute: () => AiRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/ai': typeof AiRoute
+  '/ai': typeof AiRouteWithChildren
   '/all-tools': typeof AllToolsRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai/categories': typeof AiCategoriesRoute
+  '/ai/collections': typeof AiCollectionsRoute
+  '/ai/comparisons': typeof AiComparisonsRoute
+  '/ai/marketplace': typeof AiMarketplaceRoute
+  '/ai/models': typeof AiModelsRoute
+  '/ai/news': typeof AiNewsRoute
+  '/ai/prompts': typeof AiPromptsRoute
+  '/ai/resources': typeof AiResourcesRoute
+  '/ai/tools': typeof AiToolsRoute
+  '/ai/tutorials': typeof AiTutorialsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai/': typeof AiIndexRoute
+  '/ai/category/$slug': typeof AiCategorySlugRoute
+  '/ai/tool/$slug': typeof AiToolSlugRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/ai': typeof AiRoute
   '/all-tools': typeof AllToolsRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai/categories': typeof AiCategoriesRoute
+  '/ai/collections': typeof AiCollectionsRoute
+  '/ai/comparisons': typeof AiComparisonsRoute
+  '/ai/marketplace': typeof AiMarketplaceRoute
+  '/ai/models': typeof AiModelsRoute
+  '/ai/news': typeof AiNewsRoute
+  '/ai/prompts': typeof AiPromptsRoute
+  '/ai/resources': typeof AiResourcesRoute
+  '/ai/tools': typeof AiToolsRoute
+  '/ai/tutorials': typeof AiTutorialsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai': typeof AiIndexRoute
+  '/ai/category/$slug': typeof AiCategorySlugRoute
+  '/ai/tool/$slug': typeof AiToolSlugRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
   '/admin': typeof AdminRoute
-  '/ai': typeof AiRoute
+  '/ai': typeof AiRouteWithChildren
   '/all-tools': typeof AllToolsRoute
   '/contact': typeof ContactRoute
   '/privacy': typeof PrivacyRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
+  '/ai/categories': typeof AiCategoriesRoute
+  '/ai/collections': typeof AiCollectionsRoute
+  '/ai/comparisons': typeof AiComparisonsRoute
+  '/ai/marketplace': typeof AiMarketplaceRoute
+  '/ai/models': typeof AiModelsRoute
+  '/ai/news': typeof AiNewsRoute
+  '/ai/prompts': typeof AiPromptsRoute
+  '/ai/resources': typeof AiResourcesRoute
+  '/ai/tools': typeof AiToolsRoute
+  '/ai/tutorials': typeof AiTutorialsRoute
   '/category/$slug': typeof CategorySlugRoute
   '/tools/$slug': typeof ToolsSlugRoute
+  '/ai/': typeof AiIndexRoute
+  '/ai/category/$slug': typeof AiCategorySlugRoute
+  '/ai/tool/$slug': typeof AiToolSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -129,21 +245,46 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai/categories'
+    | '/ai/collections'
+    | '/ai/comparisons'
+    | '/ai/marketplace'
+    | '/ai/models'
+    | '/ai/news'
+    | '/ai/prompts'
+    | '/ai/resources'
+    | '/ai/tools'
+    | '/ai/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai/'
+    | '/ai/category/$slug'
+    | '/ai/tool/$slug'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/about'
     | '/admin'
-    | '/ai'
     | '/all-tools'
     | '/contact'
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai/categories'
+    | '/ai/collections'
+    | '/ai/comparisons'
+    | '/ai/marketplace'
+    | '/ai/models'
+    | '/ai/news'
+    | '/ai/prompts'
+    | '/ai/resources'
+    | '/ai/tools'
+    | '/ai/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai'
+    | '/ai/category/$slug'
+    | '/ai/tool/$slug'
   id:
     | '__root__'
     | '/'
@@ -155,15 +296,28 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/sitemap.xml'
     | '/terms'
+    | '/ai/categories'
+    | '/ai/collections'
+    | '/ai/comparisons'
+    | '/ai/marketplace'
+    | '/ai/models'
+    | '/ai/news'
+    | '/ai/prompts'
+    | '/ai/resources'
+    | '/ai/tools'
+    | '/ai/tutorials'
     | '/category/$slug'
     | '/tools/$slug'
+    | '/ai/'
+    | '/ai/category/$slug'
+    | '/ai/tool/$slug'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
   AdminRoute: typeof AdminRoute
-  AiRoute: typeof AiRoute
+  AiRoute: typeof AiRouteWithChildren
   AllToolsRoute: typeof AllToolsRoute
   ContactRoute: typeof ContactRoute
   PrivacyRoute: typeof PrivacyRoute
@@ -238,6 +392,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai/': {
+      id: '/ai/'
+      path: '/'
+      fullPath: '/ai/'
+      preLoaderRoute: typeof AiIndexRouteImport
+      parentRoute: typeof AiRoute
+    }
     '/tools/$slug': {
       id: '/tools/$slug'
       path: '/tools/$slug'
@@ -252,14 +413,132 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai/tutorials': {
+      id: '/ai/tutorials'
+      path: '/tutorials'
+      fullPath: '/ai/tutorials'
+      preLoaderRoute: typeof AiTutorialsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/tools': {
+      id: '/ai/tools'
+      path: '/tools'
+      fullPath: '/ai/tools'
+      preLoaderRoute: typeof AiToolsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/resources': {
+      id: '/ai/resources'
+      path: '/resources'
+      fullPath: '/ai/resources'
+      preLoaderRoute: typeof AiResourcesRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/prompts': {
+      id: '/ai/prompts'
+      path: '/prompts'
+      fullPath: '/ai/prompts'
+      preLoaderRoute: typeof AiPromptsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/news': {
+      id: '/ai/news'
+      path: '/news'
+      fullPath: '/ai/news'
+      preLoaderRoute: typeof AiNewsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/models': {
+      id: '/ai/models'
+      path: '/models'
+      fullPath: '/ai/models'
+      preLoaderRoute: typeof AiModelsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/marketplace': {
+      id: '/ai/marketplace'
+      path: '/marketplace'
+      fullPath: '/ai/marketplace'
+      preLoaderRoute: typeof AiMarketplaceRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/comparisons': {
+      id: '/ai/comparisons'
+      path: '/comparisons'
+      fullPath: '/ai/comparisons'
+      preLoaderRoute: typeof AiComparisonsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/collections': {
+      id: '/ai/collections'
+      path: '/collections'
+      fullPath: '/ai/collections'
+      preLoaderRoute: typeof AiCollectionsRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/categories': {
+      id: '/ai/categories'
+      path: '/categories'
+      fullPath: '/ai/categories'
+      preLoaderRoute: typeof AiCategoriesRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/tool/$slug': {
+      id: '/ai/tool/$slug'
+      path: '/tool/$slug'
+      fullPath: '/ai/tool/$slug'
+      preLoaderRoute: typeof AiToolSlugRouteImport
+      parentRoute: typeof AiRoute
+    }
+    '/ai/category/$slug': {
+      id: '/ai/category/$slug'
+      path: '/category/$slug'
+      fullPath: '/ai/category/$slug'
+      preLoaderRoute: typeof AiCategorySlugRouteImport
+      parentRoute: typeof AiRoute
+    }
   }
 }
+
+interface AiRouteChildren {
+  AiCategoriesRoute: typeof AiCategoriesRoute
+  AiCollectionsRoute: typeof AiCollectionsRoute
+  AiComparisonsRoute: typeof AiComparisonsRoute
+  AiMarketplaceRoute: typeof AiMarketplaceRoute
+  AiModelsRoute: typeof AiModelsRoute
+  AiNewsRoute: typeof AiNewsRoute
+  AiPromptsRoute: typeof AiPromptsRoute
+  AiResourcesRoute: typeof AiResourcesRoute
+  AiToolsRoute: typeof AiToolsRoute
+  AiTutorialsRoute: typeof AiTutorialsRoute
+  AiIndexRoute: typeof AiIndexRoute
+  AiCategorySlugRoute: typeof AiCategorySlugRoute
+  AiToolSlugRoute: typeof AiToolSlugRoute
+}
+
+const AiRouteChildren: AiRouteChildren = {
+  AiCategoriesRoute: AiCategoriesRoute,
+  AiCollectionsRoute: AiCollectionsRoute,
+  AiComparisonsRoute: AiComparisonsRoute,
+  AiMarketplaceRoute: AiMarketplaceRoute,
+  AiModelsRoute: AiModelsRoute,
+  AiNewsRoute: AiNewsRoute,
+  AiPromptsRoute: AiPromptsRoute,
+  AiResourcesRoute: AiResourcesRoute,
+  AiToolsRoute: AiToolsRoute,
+  AiTutorialsRoute: AiTutorialsRoute,
+  AiIndexRoute: AiIndexRoute,
+  AiCategorySlugRoute: AiCategorySlugRoute,
+  AiToolSlugRoute: AiToolSlugRoute,
+}
+
+const AiRouteWithChildren = AiRoute._addFileChildren(AiRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
   AdminRoute: AdminRoute,
-  AiRoute: AiRoute,
+  AiRoute: AiRouteWithChildren,
   AllToolsRoute: AllToolsRoute,
   ContactRoute: ContactRoute,
   PrivacyRoute: PrivacyRoute,
