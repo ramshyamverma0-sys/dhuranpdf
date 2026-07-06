@@ -39,7 +39,7 @@ import {
 
 const CANONICAL = "https://dhuranpdf.lovable.app/ai";
 
-export const Route = createFileRoute("/ai")({
+export const Route = createFileRoute("/ai/")({
   head: () => ({
     meta: [
       { title: "Dhuran AI Hub | Discover AI Tools, Models & Prompts" },
